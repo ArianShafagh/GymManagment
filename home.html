@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
+    <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
     <style>
         * {
             margin: 0;
@@ -18,35 +19,42 @@
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="logo">
-                
+    <header class="bg-black text-white">
+        <div class="container-fluid d-flex justify-content-between align-items-center py-2">
+            <div class="logo flex-shrink-0">
+                <img src="./assets/download.png" alt="" class="img-fluid" style="height: 96px; width: 96px;">
             </div>
             <nav class="navigation d-flex justify-content-around align-items-center">
                 <div class="home">
                     <a href="#home"><i class="fa fa-home" aria-hidden="true">Home</i></a>
                 </div>
-                <div class="login">
-
-                </div>
                 <div class="clothstore">
-
+                    <a href="#clothstore">Clothes Store</a>
                 </div>
                 <div class="supplements">
-
+                    <a href="#supplements">Supplements</a>
                 </div>
                 
                 <div class="gyms">
-
+                    <a href="#gyms">Gyms</a>
                 </div>
                 <div class="contactus">
-                    
-                </div>
-                <div class="about">
-
+                    <a href="#contactus">Contact Us</a>
                 </div>
             </nav>
+            <div class="access d-flex gap-1 align-items-center px-3">
+                <div class="Login">
+                    <a href="#" class="btn text-white" role="button">
+                        <div class="LoginSrtye d-flex align-items-center gap-2">
+                            <i class="bx bx-arrow-to-right bx-flip-vertical " style='color:#ffffff; font-size: 25px;'></i>
+                            <span class="fs-5">Login</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="Join">
+                    <a href="#" class="btn btn-danger rounded-pill" role="button" style="font-size: 25px;">Join Now</a>
+                </div>
+            </div>
         </div>
     </header>
 
