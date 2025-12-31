@@ -3,76 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Bull</title>
+    <link rel="title icon" href="./assets/download.png">
     <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
     <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-size: 20px;
-        }
-        a{
-            text-decoration: none;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/main.css">
+
+    <!-- BOX ICONS -->
+    <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
+
+
+    <!-- LINKING THE FONT  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=BBH+Bartle&display=swap" rel="stylesheet"> 
 </head>
 <body>
-    <header class="bg-black text-white">
-        <div class="container-fluid d-flex justify-content-between align-items-center py-2">
-            <div class="logo flex-shrink-0">
-                <img src="./assets/download.png" alt="" class="img-fluid" style="height: 96px; width: 96px;">
-            </div>
-            <nav class="navigation d-flex justify-content-around align-items-center">
-                <div class="home">
-                    <a href="#home"><i class="fa fa-home" aria-hidden="true">Home</i></a>
-                </div>
-                <div class="clothstore">
-                    <a href="#clothstore">Clothes Store</a>
-                </div>
-                <div class="supplements">
-                    <a href="#supplements">Supplements</a>
-                </div>
-                
-                <div class="gyms">
-                    <a href="#gyms">Gyms</a>
-                </div>
-                <div class="contactus">
-                    <a href="#contactus">Contact Us</a>
-                </div>
-            </nav>
-            <div class="access d-flex gap-1 align-items-center px-3">
-                <div class="Login">
-                    <a href="#" class="btn text-white" role="button">
-                        <div class="LoginSrtye d-flex align-items-center gap-2">
-                            <i class="bx bx-arrow-to-right bx-flip-vertical " style='color:#ffffff; font-size: 25px;'></i>
-                            <span class="fs-5">Login</span>
-                        </div>
-                    </a>
-                </div>
-                <div class="Join">
-                    <a href="#" class="btn btn-danger rounded-pill" role="button" style="font-size: 25px;">Join Now</a>
-                </div>
-            </div>
+
+
+  <!-- navbar -->
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-black p-2">
+
+    <!-- Logo -->
+    <a class="navbar-brand me-lg-5 ms-lg-5" href="home.html">
+      <img src="./assets/download.png" alt="logo">
+    </a>
+    <button class="navbar-toggler position-static" type="button" data-toggle="collapse" data-target="#mynav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse my-3" id="mynav">
+      <ul class="navbar-nav d-flex justify-content-center mt-3">
+        <li class="nav-item justify-content-center">
+          <a href="home.html" class="bbh-bartle-regular btn btn-outline-danger border-0">Home</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="bbh-bartle-regular btn btn-outline-danger border-0 dropdown-toggle"
+             href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Store
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="clothing.html">Clothing</a>
+            <a class="dropdown-item" href="accessories.html">Accessories</a>
+            <a class="dropdown-item" href="supplements.html">Supplements</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="about.html" class="bbh-bartle-regular btn btn-outline-danger border-0">About</a>
+        </li>
+        <li class="nav-item">
+          <a href="contact.html" class="bbh-bartle-regular btn btn-outline-danger border-0">Contact</a>
+        </li>
+      </ul>
+      <div class="access d-lg-none d-flex justify-content-center mt-3">
+        <div class="login d-flex align-items-center me-3">
+          <i class="bx bx-arrow-to-right text-light me-1"></i>
+          <a href="login.html" class="anton-regular text-light text-decoration-none fs-5">Login</a>
         </div>
-    </header>
+        <a href="join.html" class="anton-regular btn btn-outline-danger fs-5 px-3">Join now</a>
+      </div>
+    </div>
+      <div class="access d-none d-lg-flex justify-content-end mt-3">
+        <div class="login d-flex align-items-center me-3">
+          <i class="bx bx-arrow-to-right text-light me-1"></i>
+          <a href="login.html" class="anton-regular text-light text-decoration-none fs-5">Login</a>
+        </div>
+        <a href="join.html" class="anton-regular btn btn-outline-danger fs-5 px-3">Join now</a>
+      </div>
+ 
+  </nav>
+    <!-- navbar end -->
+
+  section
 
 
 
-    <main>
 
-    </main>
+</header>
+   
+
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <footer>
+
+
+
+  </footer>
 
 
 
 
 
-    <footer>
 
 
-    </footer>
-    <script src="./bootstrap/jquery-3.7.1.slim.min.js"></script>
-    <script src="./bootstrap/bootstrap.min.js"></script>
+
+    <!-- optional js scripts -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
