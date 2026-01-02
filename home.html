@@ -11,8 +11,10 @@
 
     <!-- BOX ICONS -->
     <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
-
-
+    <link href='https://cdn.boxicons.com/3.0.4/fonts/animations.min.css' rel='stylesheet'>
+    
+    
+    
     <!-- LINKING THE FONT  -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
@@ -36,40 +38,35 @@
       <div class="collapse navbar-collapse justify-content-around" id="mynav">
         <ul class="navbar-nav d-flex flex-lg-row flex-md-column mt-3 ">
           <li class="nav-item justify-content-center me-lg-5 mb-md-2">
-            <a href="home.html" class="anton-regular btn btn-outline-danger border-0 fs-3">Home</a>
+            <a href="Home.html" class="anton-regular btn btn-outline-danger border-0 fs-3">Home</a>
           </li>
-          <li class="nav-item dropdown me-lg-5 mb-md-2">
-            <a class="anton-regular btn btn-outline-danger border-0 dropdown-toggle fs-3"
-              href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <li class="nav-item me-lg-5 mb-md-2">
+            <a class="anton-regular btn btn-outline-danger border-0 fs-3"
+              href="Store.html">
               Store
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="clothing.html">Clothing</a>
-              <a class="dropdown-item" href="accessories.html">Accessories</a>
-              <a class="dropdown-item" href="supplements.html">Supplements</a>
-            </div>
           </li>
           <li class="nav-item me-lg-5 mb-md-2">
-            <a href="about.html" class="anton-regular btn btn-outline-danger border-0 fs-3">About</a>
+            <a href="About.html" class="anton-regular btn btn-outline-danger border-0 fs-3">About</a>
           </li>
           <li class="nav-item me-lg-5 mb-md-2">
-            <a href="contact.html" class="anton-regular btn btn-outline-danger border-0 fs-3">Contact</a>
+            <a href="Contact.html" class="anton-regular btn btn-outline-danger border-0 fs-3">Contact</a>
           </li>
         </ul>
         <div class="access d-lg-none d-flex justify-content-center mt-3">
           <div class="login d-flex align-items-center me-3">
             <i class="bx bx-arrow-to-right text-light me-1"></i>
-            <a href="login.html" class="anton-regular text-light text-decoration-none fs-5">Login</a>
+            <a href="Login.html" class="anton-regular text-light text-decoration-none fs-5">Login</a>
           </div>
-          <a href="join.html" class="anton-regular btn btn-outline-danger fs-5 px-3">Join now</a>
+          <a href="Join.html" class="anton-regular btn btn-outline-danger fs-5 px-3">Join now</a>
         </div>
       </div>
         <div class="access d-none d-lg-flex justify-content-end mt-3">
           <div class="login d-flex align-items-center me-3">
             <i class="bx bx-arrow-to-right text-light me-1"></i>
-            <a href="login.html" class="anton-regular text-light text-decoration-none fs-5">Login</a>
+            <a href="Login.html" class="anton-regular text-light text-decoration-none fs-5">Login</a>
           </div>
-          <a href="join.html" class="anton-regular btn btn-outline-danger fs-5 px-3">Join now</a>
+          <a href="Join.html" class="anton-regular btn btn-outline-danger fs-3 px-3">Join now</a>
         </div>
 
     </nav>
@@ -96,7 +93,7 @@
                         class="w-100 h-100"
                         style="object-fit: cover; border-radius: 8px; opacity: 0.75;"
                         src="./assets/vid/4761416-uhd_2160_4096_25fps.mp4" 
-                        autoplay muted loop playsinline></video>
+                        autoplay muted loop></video>
                     </div>
                   </div>
                 </div>
@@ -161,6 +158,7 @@
   </header>
 
   <main>
+    <!-- membership plans section start -->
     <section class="membership plans bg-light d-flex flex-column align-items-center py-5">
       <div class="textbolder text-center px-3 px-md-5">
         <h1 class="anton-regular text-dark mt-5 display-3">Membership Plans</h1>
@@ -196,7 +194,11 @@
       </div>
 
     </section>
+    <!-- membership plans section end -->
 
+
+
+    <!-- news slider section start -->
     <section class="NewsSlider bg-danger py-5">
       
       <h1 class="anton-regular text-dark display-3 text-center mt-5">LATEST NEWS</h1>
@@ -208,10 +210,9 @@
           <!-- item 1 -->
 
           <div class="carousel-item active mt-5">
-            <!-- Responsive flex container -->
             <div class="container-fluid">
               <div class="row align-items-center g-0">
-                <!-- Image column (12 on sm, 6 on md+) -->
+                <!-- Image column-->
                 <div class="col-12 col-md-6 overflow-hidden" style="max-width: 800px; max-height: 800px;">
                   <div class="rounded-5 overflow-hidden shadow-lg">
                     <img 
@@ -230,7 +231,7 @@
                     <p class="fs-2 m-4 w-75">
                       Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam optio assumenda eligendi consequatur quae obcaecati nulla, libero ad repellat quod rerum laboriosam?
                     </p>
-                    <a href="#" class="btn btn-primary align-self-start m-4 fs-3">Read More</a>
+                    <a href="#" class="btn btn-primary align-self-start m-4 fs-5">Read More</a>
                   </div>
                 </div>
               </div>
@@ -242,10 +243,9 @@
 
 
           <div class="carousel-item mt-5">
-            <!-- Responsive flex container -->
             <div class="container-fluid">
               <div class="row align-items-center g-0">
-                <!-- Image column (12 on sm, 6 on md+) -->
+                <!-- Image column-->
                 <div class="col-12 col-md-6 overflow-hidden" style="max-width: 800px; max-height: 800px;">
                   <div class="rounded-5 overflow-hidden shadow-lg">
                     <img 
@@ -264,7 +264,7 @@
                     <p class="fs-2 m-4 w-75">
                       Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam optio assumenda eligendi consequatur quae obcaecati nulla, libero ad repellat quod rerum laboriosam?
                     </p>
-                    <a href="#" class="btn btn-primary align-self-start m-4 fs-3">Read More</a>
+                    <a href="#" class="btn btn-primary align-self-start m-4 fs-5">Read More</a>
                   </div>
                 </div>
               </div>
@@ -276,10 +276,9 @@
 
 
           <div class="carousel-item mt-5">
-            <!-- Responsive flex container -->
             <div class="container-fluid">
               <div class="row align-items-center g-0">
-                <!-- Image column (12 on sm, 6 on md+) -->
+                <!-- Image column-->
                 <div class="col-12 col-md-6 overflow-hidden" style="max-width: 800px; max-height: 800px;">
                   <div class="rounded-5 overflow-hidden shadow-lg">
                     <img 
@@ -298,7 +297,7 @@
                     <p class="fs-2 m-4 w-75">
                       Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam optio assumenda eligendi consequatur quae obcaecati nulla, libero ad repellat quod rerum laboriosam?
                     </p>
-                    <a href="#" class="btn btn-primary align-self-start m-4 fs-3">Read More</a>
+                    <a href="#" class="btn btn-primary align-self-start m-4 fs-5">Read More</a>
                   </div>
                 </div>
               </div>
@@ -313,7 +312,53 @@
       </div>
     </section>
 
+    <!-- welcome section start -->
+    <section class="about bg-light-subtle row m-0 p-0 d-flex flex-column align-items-center py-5">
+      <div class="welcomeIMG col-12 " style="max-width: 800px; max-height: 600px;">
+        <img src="assets\gym\samuel-girven-fqMu99l8sqo-unsplash.jpg" alt="Gym Image" class="w-100 h-100 object-fit-cover rounded-5 shadow-lg">
+      </div>
+      <div class="textinfo col-12">
+        <h1 class="anton-regular text-uppercase text-center mt-5">a place where <span class="text-danger">everyone</span> feels welcome</h1>
+        <p class="fs-5 mt-3 text-center px-3 px-md-5">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.
+      </div>
+      <div class="aboutItems d-flex flex-md-row flex-column align-content-center justify-content-center gap-4 mt-5 w-100 px-3 px-md-5">
+
+          <!-- item1 -->
+          <div class="item1 d-flex flex-column align-content-center">
+            <div class="icone text-center">
+            <i class="bx bxs-dollar-circle display-1 bx-tada" style='color:#ff0000'></i>
+            </div>
+            <h2 class="anton-regular text-center mt-3">Affordable Prices</h2>
+            <p class="fs-5 mt-2 text-center px-3 px-md-5" style="max-width: 400px; margin: 0 auto;">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.
+          </div>
+          
+
+          <!-- item2 -->
+          <div class="item2 d-flex flex-column align-content-center">
+            <div class="icone text-center">
+              <i class='bx  bxs-clock-4 bx-flip-vertical bx-tada display-1' style='color:#ff0000'></i>             
+            </div>
+            <h2 class="anton-regular text-center mt-3">Open All Day</h2>
+            <p class="fs-5 mt-2 text-center px-3 px-md-5" style="max-width: 400px; margin: 0 auto;">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.
+          </div>
+
+
+          <!-- item3 -->
+          <div class="item3 d-flex flex-column align-content-center">
+            <div class="icone text-center">
+              <i class='bx  bxs-dumbbell bx-flip-vertical bx-tada display-1' style='color:#ff0000'></i>   
+            </div>
+            <h2 class="anton-regular text-center mt-3">Top Equipment</h2>
+            <p class="fs-5 mt-2 text-center px-3 px-md-5" style="max-width: 400px; margin: 0 auto;">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.
+          </div>
+      </div>
+    </section>
   </main>
+  <!-- welcome section end -->
     
 
   
@@ -323,10 +368,17 @@
     
   <!-- footer start -->
   <footer>
+    <div class="footer bg-black text-light d-flex flex-column align-items-center py-4">
+      <img src="./assets/download.png" alt="LOGO" class="mb-3">
+      <h2 class="anton-regular text-danger display-4">BULL</h2>
+      <p class="fs-5 text-center px-3 px-md-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.</p>
+      <p class="fs-5 mt-3">&copy; 2025 Bull. All rights reserved.</p>
+    </div>
   </footer>
+  <!-- footer end -->
 
 
-  <!-- optional js scripts -->
+  <!-- js scripts -->
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
