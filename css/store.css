@@ -1,0 +1,96 @@
+
+@media (max-width: 576px) {
+  .prev_supplements{
+  left: -20px;
+  top: 75%;
+  transform: translateY(-75%);
+  position: absolute;
+}
+.next_supplements{
+  right: -20px;
+  top: 75%;
+  transform: translateY(-75%);
+  position: absolute;
+}
+
+}
+
+@media (max-width: 768px) {
+  .prev_supplements{
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  /* transform: translateX(-50%); */
+  position: absolute;
+}
+.next_supplements{
+  right: -20px;
+  top: 75%;
+  transform: translateY(-75%);
+  position: absolute;
+}
+
+}
+
+@media (max-width: 992px) {
+  .prev_supplements{
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  justify-content:start;
+}
+.next_supplements{
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+}
+}
+
+@media (max-width: 1200px) {
+  .prev_supplements{
+  left: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  justify-content: center;
+}
+.next_supplements{
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+}
+}
+
+@media (max-width: 1200px) {
+  .prev_supplements{
+  left: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  justify-content: center;
+}
+.next_supplements{
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+}
+}
+@media (min-width: 1200px) {
+  .prev_supplements{
+  left: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  justify-content: center;
+}
+.next_supplements{
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+}
+}
