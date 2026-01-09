@@ -1,3 +1,33 @@
+<?php
+// Start the session
+
+include("db.php");
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $result = mysqli_query($conn, $sql);
+    
+    if ($result && mysqli_num_rows($result) == 1) {
+        $row = mysqli_fetch_assoc($result);
+        $passwordFromDB = $row['password'];
+    
+        if (password_verify($password, $passwordFromDB)){
+            echo"<script>alert('Login successful!'); window.location.href = 'Home.php';</script>";
+            exit();
+        } else {
+            echo"<script>alert('Invalid password. Please try again.');</script>";
+        }
+    } else {
+        echo"<script>alert('Invalid email. Please try again.');</script>";
+    }
+
+    mysqli_close($conn);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,17 +64,17 @@
                 <div class="row w-100">
                     <div class="card col-md-6 offset-md-3 p-4" style="background-color: rgba(255, 255, 255, 0.8);">
                         <h2 class="anton-regular text-center mb-4">Login</h2>
-                        <form>
+                        <form action="" method="POST">
                             <div class="mb-3">
-                                <label for="email" class="form-label">Email address</label>
-                                <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                                <label class="form-label">Email address</label>
+                                <input type="email" name="email" class="form-control" id="email" placeholder="Enter your email" required>
                             </div>
                             <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                                <label class="form-label">Password</label>
+                                <input type="password" name="password" class="form-control" id="password" placeholder="Enter your password" required>
                             </div>
                             <button type="submit" class="btn btn-primary w-25 d-block mx-auto">Login</button>
-                            <a href="Join.html" class="d-block text-center mt-3">Not a member? Join now</a>
+                            <a href="Join.php" class="d-block text-center mt-3">Not a member? Join now</a>
                         </form>
                     </div>
                 </div>

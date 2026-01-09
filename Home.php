@@ -1,4 +1,6 @@
+<?php
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,17 +59,17 @@
         <div class="access d-lg-none d-flex justify-content-center mt-3">
           <div class="login d-flex align-items-center me-3">
             <i class="bx bx-arrow-to-right text-light me-1"></i>
-            <a href="Login.html" class="anton-regular text-light text-decoration-none fs-5">Login</a>
+            <a href="Login.php" class="anton-regular text-light text-decoration-none fs-5">Login</a>
           </div>
-          <a href="Join.html" class="anton-regular btn btn-outline-danger fs-5 px-3">Join now</a>
+          <a href="Join.php" class="anton-regular btn btn-outline-danger fs-5 px-3">Join now</a>
         </div>
       </div>
         <div class="access d-none d-lg-flex justify-content-end mt-3">
           <div class="login d-flex align-items-center me-3">
             <i class="bx bx-arrow-to-right text-light me-1"></i>
-            <a href="Login.html" class="anton-regular text-light text-decoration-none fs-5">Login</a>
+            <a href="Login.php" class="anton-regular text-light text-decoration-none fs-5">Login</a>
           </div>
-          <a href="Join.html" class="anton-regular btn btn-outline-danger fs-3 px-3">Join now</a>
+          <a href="Join.php" class="anton-regular btn btn-outline-danger fs-3 px-3">Join now</a>
         </div>
 
     </nav>
@@ -174,7 +176,7 @@
             <h1 class="anton-regular text-white display-4">$49.99</h1>
             <p class="text-white fs-5 mt-2">per month</p>
             <p class="text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus provident, eveniet labore corrupti hic consequuntur officia. Velit vitae blanditiis repellat.</p>
-            <a href="join.html" class="btn btn-outline-light mt-3 px-4">Join Now</a>
+            <a href="join.php" class="btn btn-outline-light mt-3 px-4">Join Now</a>
           </div>
         </div>
         <div class="SecondCart">
@@ -185,7 +187,7 @@
             <h1 class="anton-regular text-white display-4">$19.99</h1>
             <p class="text-white fs-5 mt-2">per month</p>
             <p class="text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus provident, eveniet labore corrupti hic consequuntur officia. Velit vitae blanditiis repellat.</p>
-            <a href="join.html" class="btn btn-outline-light mt-3 px-4">Join Now</a>
+            <a href="join.php" class="btn btn-outline-light mt-3 px-4">Join Now</a>
           </div>
         </div>
       </div>
