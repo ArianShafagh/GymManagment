@@ -1,6 +1,7 @@
 <?php
 // Start the session
 
+session_start();
 include("db.php");
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -16,6 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $passwordFromDB = $row['password'];
     
         if (password_verify($password, $passwordFromDB)){
+            $_SESSION['user_name'] = $row['first_name'];
+            $_SESSION['user_email'] = $row['email'];
             echo"<script>alert('Login successful!'); window.location.href = 'Home.php';</script>";
             exit();
         } else {

@@ -1,6 +1,7 @@
 <?php
 include 'db.php';
 
+session_start();
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -17,17 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $payment_method = $_POST['paymentMethodes'] ?? '';
 
     // Validation
-    if (empty($name) || empty($lastname)) {
-        $errors[] = "First and last name are required.";
-    }
-
-    if (empty($dob)) {
-        $errors[] = "Date of birth is required.";
-    }
-
-    if (!in_array($gender, ['male', 'female', 'other'])) {
-        $errors[] = "Invalid gender selection.";
-    }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Valid email is required.";
@@ -42,21 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Password must be at least 8 characters and include upper, lower case and a number.";
     }
 
-    if (empty($subscription)) {
-        $errors[] = "Invalid subscription plan.";
-    }
-
-    if (empty($duration)) {
-        $errors[] = "Invalid duration.";
-    }
-
-    if (empty($payment_method)) {
-        $errors[] = "Please select a payment method.";
-    }
-
-    if (!isset($_POST['tos1'])) {
-        $errors[] = "You must agree to the Terms and Conditions.";
-    }
 
     // Email check ONLY if email is not empty
     if ($email) {
@@ -69,7 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $start_date = date('Y-m-d');
-        $end_date = date('Y-m-d', strtotime("+$duration months"));
+        if ($duration == '3' || $duration == '6') {
+            $end_date = date('Y-m-d', strtotime("+$duration months"));
+        } elseif ($duration == '12') {
+            $end_date = date('Y-m-d', strtotime("+1 year"));
+        }
         $credit = 1000;
 
         $hashed_password = password_hash($raw_password, PASSWORD_BCRYPT);
@@ -80,6 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ('$name', '$lastname', '$dob', '$gender', '$email', '$hashed_password', '$subscription', '$duration', '$start_date', '$end_date', '$credit', '$payment_method')";
 
         if (mysqli_query($conn, $sql)) {
+            $_SESSION['user_email'] = $email;
+            $_SESSION['user_name'] = $name;
             echo "<script>alert('Registration successful!'); window.location.href='Login.php';</script>";
             exit();
         } else {
@@ -246,7 +227,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary w-25 d-block mx-auto mt-3 text-nowrap">Register</button>
-                                    <a href="Login.html" class="d-block text-center mt-3">Already a member? Login now</a>
+                                    <a href="Login.php" class="d-block text-center mt-3">Already a member? Login now</a>
                             </div>
                         </div>
                     </div>

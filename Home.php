@@ -1,5 +1,5 @@
 <?php
-
+  session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
     <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/home.css">
 
     <!-- BOX ICONS -->
     <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
@@ -34,10 +35,34 @@
       <a class="navbar-brand me-lg-5 ms-lg-5 me-sm-5 ms-sm-5" href="home.html">
         <img src="./assets/download.png" alt="logo">
       </a>
-      <button class="navbar-toggler position-static me-lg-5 ms-lg-5 me-sm-5 ms-sm-5" type="button" data-toggle="collapse" data-target="#mynav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
 
+
+      <div class="right-section d-flex me-lg-5 ms-lg-1 me-sm-5 d-lg-none">
+        <div class="account-mobile">
+          <div class="dropdown position-relative">
+            <button class="btn btn-dark rounded-5 p-0 border-0" type="button" id="accountMobileDropdown" data-toggle="dropdown" aria-expanded="false">
+              <i class='bx bx-user fs-1' style='color:#ff0000'></i>
+            </button>
+            <ul class="custom-dropdown-menu dropdown-menu" aria-labelledby="accountMobileDropdown">
+              <li class="d-flex flex-row align-items-center g-0">
+                <a class="dropdown-item" href="Join.php" style = 'font-size: 20px;'>
+                  <i class='bx  bx-user-plus bx-flip-horizontal' style='color:#ffffff; font-size: 20px;'></i> Join Now
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="Login.php" style="font-size: 20px;">
+                  <i class='bx bx-arrow-to-right bx-flip-horizontal' style='color:#ffffff; font-size: 20px;'></i> login
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <button class="navbar-toggler mx-3" type="button" data-toggle="collapse" data-target="#mynav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+       </div>
+
+      <!-- navbar(collapse)  -->
       <div class="collapse navbar-collapse justify-content-around" id="mynav">
         <ul class="navbar-nav d-flex flex-lg-row flex-md-column mt-3 ">
           <li class="nav-item justify-content-center me-lg-5 mb-md-2">
@@ -56,21 +81,48 @@
             <a href="Contact.html" class="anton-regular btn btn-outline-danger border-0 fs-3">Contact</a>
           </li>
         </ul>
-        <div class="access d-lg-none d-flex justify-content-center mt-3">
+      </div>
+
+
+
+      <!-- Desktop auth section (visible only on lg and up) -->
+      <?php if (isset($_SESSION['user_name'])): ?>
+        <div class="d-none d-lg-flex align-items-center mt-3 me-3">
+
+           <div class="welcomeMessage d-flex flex-column align-content-center g-0">
+              <span class="anton-regular text-light fs-5 me-2">Welcome</span>
+              <span class="anton-regular text-light fs-5 text-center"> <?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
+           </div>
+
+          <div class="dropdown position-relative">
+            <button class="btn btn-dark rounded-5 p-0 border-0" type="button" id="accountDropdown" data-toggle="dropdown" aria-expanded="false">
+              <i class='bx bx-user fs-1' style='color:#ff0000'></i>
+            </button>
+
+            <ul class="custom-dropdown-menu dropdown-menu" aria-labelledby="accountDropdown">
+              <li class="d-flex flex-row align-items-center g-0">
+                <a class="dropdown-item" href="settings.php" style="font-size: 20px;">
+                  <i class='bx  bx-cog bx-flip-horizontal' style='color:#ffffff; font-size: 20px;'></i>  Settings
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="Logout.php" style="font-size: 20px;">
+                  
+                  <i class='bx  bx-arrow-from-left bx-flip-horizontal' style='color:#ffffff; font-size: 20px;'></i> Logout
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      <?php else: ?>
+        <div class="access d-none d-lg-flex align-items-center mt-3 me-3">
           <div class="login d-flex align-items-center me-3">
             <i class="bx bx-arrow-to-right text-light me-1"></i>
             <a href="Login.php" class="anton-regular text-light text-decoration-none fs-5">Login</a>
           </div>
           <a href="Join.php" class="anton-regular btn btn-outline-danger fs-5 px-3">Join now</a>
         </div>
-      </div>
-        <div class="access d-none d-lg-flex justify-content-end mt-3">
-          <div class="login d-flex align-items-center me-3">
-            <i class="bx bx-arrow-to-right text-light me-1"></i>
-            <a href="Login.php" class="anton-regular text-light text-decoration-none fs-5">Login</a>
-          </div>
-          <a href="Join.php" class="anton-regular btn btn-outline-danger fs-3 px-3">Join now</a>
-        </div>
+      <?php endif; ?>
 
     </nav>
       <!-- navbar end -->
@@ -176,7 +228,11 @@
             <h1 class="anton-regular text-white display-4">$49.99</h1>
             <p class="text-white fs-5 mt-2">per month</p>
             <p class="text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus provident, eveniet labore corrupti hic consequuntur officia. Velit vitae blanditiis repellat.</p>
-            <a href="join.php" class="btn btn-outline-light mt-3 px-4">Join Now</a>
+            <?php if (isset($_SESSION['user_name'])): ?>
+              <a href="Account.php" class="btn btn-outline-light mt-3 px-4">Change the plan</a>
+            <?php else: ?>
+              <a href="join.php" class="btn btn-outline-light mt-3 px-4">Join Now</a>
+            <?php endif; ?>
           </div>
         </div>
         <div class="SecondCart">
@@ -187,7 +243,11 @@
             <h1 class="anton-regular text-white display-4">$19.99</h1>
             <p class="text-white fs-5 mt-2">per month</p>
             <p class="text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus provident, eveniet labore corrupti hic consequuntur officia. Velit vitae blanditiis repellat.</p>
+            <?php if (isset($_SESSION['user_name'])): ?>
+              <a href="Account.php" class="btn btn-outline-light mt-3 px-4">Change the plan</a>
+            <?php else: ?>
             <a href="join.php" class="btn btn-outline-light mt-3 px-4">Join Now</a>
+            <?php endif; ?>
           </div>
         </div>
       </div>
