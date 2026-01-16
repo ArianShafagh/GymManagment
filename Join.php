@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Join</title>
-    <link rel="title icon" href="./assets/download.png">
+    <link rel="icon" type="image/png" href="./assets/download.png">
     <link rel="stylesheet" href="./bootstrap/bootstrap.min.css">
     <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="./css/main.css">

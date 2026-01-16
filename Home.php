@@ -36,14 +36,15 @@
         <img src="./assets/download.png" alt="logo">
       </a>
 
-
-      <div class="right-section d-flex me-lg-5 ms-lg-1 me-sm-5 d-lg-none">
+      <!-- Mobile auth section () -->
+      <div class="right-section d-flex me-lg-5 ms-lg-1 me-sm-5 d-lg-none"> 
         <div class="account-mobile">
           <div class="dropdown position-relative">
             <button class="btn btn-dark rounded-5 p-0 border-0" type="button" id="accountMobileDropdown" data-toggle="dropdown" aria-expanded="false">
               <i class='bx bx-user fs-1' style='color:#ff0000'></i>
             </button>
             <ul class="custom-dropdown-menu dropdown-menu" aria-labelledby="accountMobileDropdown">
+              <?php if (!isset($_SESSION['user_name'])): ?>
               <li class="d-flex flex-row align-items-center g-0">
                 <a class="dropdown-item" href="Join.php" style = 'font-size: 20px;'>
                   <i class='bx  bx-user-plus bx-flip-horizontal' style='color:#ffffff; font-size: 20px;'></i> Join Now
@@ -54,6 +55,18 @@
                   <i class='bx bx-arrow-to-right bx-flip-horizontal' style='color:#ffffff; font-size: 20px;'></i> login
                 </a>
               </li>
+              <?php else: ?>
+              <li class="d-flex flex-row align-items-center g-0">
+                <a class="dropdown-item" href="Account.php" style="font-size: 20px;">
+                  <i class='bx  bx-cog bx-flip-horizontal' style='color:#ffffff; font-size: 20px;'></i>  Settings
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="Logout.php" style="font-size: 20px;">
+                  <i class='bx  bx-arrow-from-left bx-flip-horizontal' style='color:#ffffff; font-size: 20px;'></i> Logout
+                </a>
+              </li>
+              <?php endif; ?>
             </ul>
           </div>
         </div>
@@ -66,19 +79,19 @@
       <div class="collapse navbar-collapse justify-content-around" id="mynav">
         <ul class="navbar-nav d-flex flex-lg-row flex-md-column mt-3 ">
           <li class="nav-item justify-content-center me-lg-5 mb-md-2">
-            <a href="Home.html" class="anton-regular btn btn-outline-danger border-0 fs-3">Home</a>
+            <a href="Home.php" class="anton-regular btn btn-outline-danger border-0 fs-3">Home</a>
           </li>
           <li class="nav-item me-lg-5 mb-md-2">
             <a class="anton-regular btn btn-outline-danger border-0 fs-3"
-              href="Store.html">
+              href="Store.php">
               Store
             </a>
           </li>
           <li class="nav-item me-lg-5 mb-md-2">
-            <a href="About.html" class="anton-regular btn btn-outline-danger border-0 fs-3">About</a>
+            <a href="About.php" class="anton-regular btn btn-outline-danger border-0 fs-3">About</a>
           </li>
           <li class="nav-item me-lg-5 mb-md-2">
-            <a href="Contact.html" class="anton-regular btn btn-outline-danger border-0 fs-3">Contact</a>
+            <a href="Contact.php" class="anton-regular btn btn-outline-danger border-0 fs-3">Contact</a>
           </li>
         </ul>
       </div>
@@ -101,7 +114,7 @@
 
             <ul class="custom-dropdown-menu dropdown-menu" aria-labelledby="accountDropdown">
               <li class="d-flex flex-row align-items-center g-0">
-                <a class="dropdown-item" href="settings.php" style="font-size: 20px;">
+                <a class="dropdown-item" href="Account.php" style="font-size: 20px;">
                   <i class='bx  bx-cog bx-flip-horizontal' style='color:#ffffff; font-size: 20px;'></i>  Settings
                 </a>
               </li>
@@ -163,7 +176,7 @@
                     <p class="fs-5 mt-3">
                       Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus eius laudantium a mollitia veniam fuga assumenda, porro nulla incidunt ex architecto quas cum perferendis iusto harum modi culpa facere sapiente ullam sit voluptates molestias saepe? Porro fugit aut vero minima perspiciatis odio incidunt, praesentium ab. Soluta tenetur fugit fugiat facilis.
                     </p>
-                    <a href="store.html" class="btn btn-outline-light mt-3 px-4">Shop Now</a>
+                    <a href="store.php" class="btn btn-outline-light mt-3 px-4">Shop Now</a>
                   </div>
 
                   <div class="col-12 col-md-6 d-flex justify-content-center px-3 mt-sm-5">
@@ -188,7 +201,7 @@
                     <p class="fs-5 mt-3">
                       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Animi soluta voluptatibus laborum quas aut quam non explicabo! Amet soluta repellat expedita iusto nihil beatae ullam labore vitae veniam? Similique, cupiditate.
                     </p>
-                    <a href="store.html" class="btn btn-outline-light mt-3 px-4">Shop Now</a>
+                    <a href="store.php" class="btn btn-outline-light mt-3 px-4">Shop Now</a>
                   </div>
                   <div class="col-12 col-md-6 d-flex justify-content-center px-3 mt-sm-5">
                     <div class="video-wrapper w-100" style="max-width: 800px; height: 800px; position: relative;">

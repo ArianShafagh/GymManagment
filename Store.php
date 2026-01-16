@@ -1,7 +1,5 @@
 <?php
 session_start();
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,17 +53,17 @@ session_start();
                 <div class="access d-lg-none d-flex justify-content-center mt-3">
                 <div class="login d-flex align-items-center me-3">
                     <i class="bx bx-arrow-to-right text-light me-1"></i>
-                    <a href="Login.html" class="anton-regular text-light text-decoration-none fs-5">Login</a>
+                    <a href="Login.php" class="anton-regular text-light text-decoration-none fs-5">Login</a>
                 </div>
-                <a href="Join.html" class="anton-regular btn btn-outline-danger fs-5 px-3">Join now</a>
+                <a href="Join.php" class="anton-regular btn btn-outline-danger fs-5 px-3">Join now</a>
                 </div>
             </div>
                 <div class="access d-none d-lg-flex justify-content-end mt-3">
                 <div class="login d-flex align-items-center me-3">
                     <i class="bx bx-arrow-to-right text-light me-1"></i>
-                    <a href="Login.html" class="anton-regular text-light text-decoration-none fs-5">Login</a>
+                    <a href="Login.php" class="anton-regular text-light text-decoration-none fs-5">Login</a>
                 </div>
-                <a href="Join.html" class="anton-regular btn btn-outline-danger fs-3 px-3">Join now</a>
+                <a href="Join.php" class="anton-regular btn btn-outline-danger fs-3 px-3">Join now</a>
                 </div>
 
         </nav>
