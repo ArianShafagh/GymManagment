@@ -1,0 +1,44 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.bbh-bartle-regular {
+  font-family: "BBH Bartle", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.anton-regular {
+  font-family: "Anton", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+a{
+    text-decoration: none;
+}
+
+/* d-flex flex-column col-6 col-md-4 m-3 p-0 rounded-3 shadow */
+.FisrtCart{
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  box-shadow: 0 px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(1deg, #ff0000 0%, #0c0000 100%);
+  min-width: 300px;
+  max-width: 400px;
+  min-height: 400px;
+}
+.SecondCart{
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  box-shadow: 0 px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(180deg, #524c4c 0%, #7a7070 100%);
+  min-width: 300px;
+  max-width: 400px;
+  min-height: 400px;
+}
