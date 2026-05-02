@@ -16,9 +16,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $passwordFromDB = $row['password'];
     
         if (password_verify($password, $passwordFromDB)){
+            // Check if 2FA is enabled
+            if ($row['two_fa_method'] !== 'none' && $row['two_fa_method'] !== null) {
+                // Store user ID in session for 2FA verification
+                $_SESSION['2fa_user_id'] = $row['id'];
+                $_SESSION['2fa_method'] = $row['two_fa_method'];
+
+                if ($row['two_fa_method'] === 'email') {
+                    // Generate and send email OTP
+                    include("../../config/mailtrap.php");
+                    $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+                    $expires = date('Y-m-d H:i:s', time() + 600);
+                    $conn->query("UPDATE users SET email_otp='$otp', email_otp_expires='$expires' WHERE id='{$row['id']}'");
+                    sendOTPEmail($row['email'], $row['first_name'], $otp);
+                }
+
+                echo"<script>window.location.href = 'Verify2FA.php';</script>";
+                exit();
+            }
+
+            // No 2FA — login directly
             $_SESSION['user_name'] = $row['first_name'];
             $_SESSION['user_email'] = $row['email'];
-            // Log the login in history
             $ip = $_SERVER['REMOTE_ADDR'];
             $device = $_SERVER['HTTP_USER_AGENT'];
             $conn->query("INSERT INTO login_history (user_id, ip_address, device_info) VALUES ('{$row['id']}', '$ip', '$device')");

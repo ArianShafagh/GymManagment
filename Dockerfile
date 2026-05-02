@@ -1,8 +1,21 @@
-FROM php:8.2-apache
+FROM php:8.4-apache
 
-# Install mysqli extension
-RUN docker-php-ext-install mysqli
-RUN docker-php-ext-enable mysqli
+# Install necessary packages and PHP extensions
+RUN apt-get update && apt-get install -y \
+    git \
+    zip \
+    unzip \
+    libzip-dev \
+    && docker-php-ext-install zip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install Composer (so you don't have to do it every time)
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install mysqli and curl extensions
+RUN apt-get update && apt-get install -y libcurl4-openssl-dev && rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-install mysqli curl
+RUN docker-php-ext-enable mysqli curl
 
 # Copy custom apache configuration if needed, or simply use default
 # Enable mod_rewrite for nice URLs if needed

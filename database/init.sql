@@ -14,13 +14,17 @@ CREATE TABLE IF NOT EXISTS users (
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     payment_method VARCHAR(100) NOT NULL,
-    two_fa_pin VARCHAR(4) DEFAULT NULL,
+    two_fa_method VARCHAR(20) DEFAULT 'none',
+    totp_secret VARCHAR(64) DEFAULT NULL,
+    email_otp VARCHAR(6) DEFAULT NULL,
+    email_otp_expires DATETIME DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS health_conditions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
+    health_status VARCHAR(20) DEFAULT 'healthy',
     medical_notes TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

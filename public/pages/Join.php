@@ -16,6 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $subscription = $_POST['subscription'] ?? '';
     $duration = $_POST['duration'] ?? '';
     $payment_method = $_POST['paymentMethodes'] ?? '';
+    $health_status = $_POST['health_status'] ?? 'healthy';
+    $medical_notes = $_POST['medical_notes'] ?? '';
 
     // Validation
 
@@ -57,6 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ('$name', '$lastname', '$dob', '$gender', '$email', '$hashed_password', '$subscription', '$duration', '$start_date', '$end_date', '$payment_method')";
 
         if (mysqli_query($conn, $sql)) {
+            // Insert health condition
+            $new_user_id = mysqli_insert_id($conn);
+            $health_status_esc = mysqli_real_escape_string($conn, $health_status);
+            $medical_notes_esc = mysqli_real_escape_string($conn, $medical_notes);
+            mysqli_query($conn, "INSERT INTO health_conditions (user_id, health_status, medical_notes) VALUES ('$new_user_id', '$health_status_esc', '$medical_notes_esc')");
+
             $_SESSION['user_email'] = $email;
             $_SESSION['user_name'] = $name;
             echo "<script>alert('Registration successful! Welcome to Bull Gym!'); window.location.href='Account.php';</script>";
@@ -139,6 +147,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <label for="password" class="form-label">Password</label>
                                         <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
                                     </div>
+
+                                    <!-- Health Condition Section -->
+                                    <div class="health mb-3">
+                                        <label class="form-label fw-bold">Health Condition</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="health_status" value="healthy" id="healthOk" checked onchange="document.getElementById('healthDetails').style.display='none';">
+                                            <label class="form-check-label" for="healthOk">
+                                                <span class="text-success">✓</span> I am healthy — no conditions
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="health_status" value="attention" id="healthAttention" onchange="document.getElementById('healthDetails').style.display='block';">
+                                            <label class="form-check-label" for="healthAttention">
+                                                <span class="text-warning">⚠</span> I need specific attention
+                                            </label>
+                                        </div>
+                                        <div id="healthDetails" class="mt-2" style="display: none;">
+                                            <textarea class="form-control" name="medical_notes" rows="2" placeholder="Please describe your condition (e.g. asthma, heart condition, injuries...)"></textarea>
+                                        </div>
+                                    </div>
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
@@ -174,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <label class="form-check d-flex align-items-center">
                                             <input type="radio" class="form-check-input me-2" name="paymentMethodes" value="paypal">
                                             PayPal
-                                            <img src="../assets/paypal.png" alt="PayPal" class="ms-2" style="width: 30px; height: 30px;">
+                                            <img src="../assets/paypal.svg" alt="PayPal" class="ms-2" style="width: 30px; height: 30px;">
                                             </label>
 
                                             <label class="form-check d-flex align-items-center">

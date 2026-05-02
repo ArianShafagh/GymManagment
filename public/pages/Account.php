@@ -57,13 +57,10 @@ $entries = $entries_res->fetch_assoc();
             <div class="collapse navbar-collapse justify-content-around" id="DashboardNav">
                 <ul class="navbar-nav d-flex flex-lg-row flex-md-column mt-3 ">
                 <li class="nav-item justify-content-center me-lg-5 mb-md-2">
-                    <a href="Home.html" class="anton-regular btn btn-outline-danger border-0 fs-3">Home</a>
+                    <a href="home.php" class="anton-regular btn btn-outline-danger border-0 fs-3">Home</a>
                 </li>
                 <li class="nav-item me-lg-5 mb-md-2">
                     <a href="About.html" class="anton-regular btn btn-outline-danger border-0 fs-3">About</a>
-                </li>
-                <li class="nav-item me-lg-5 mb-md-2">
-                    <a href="Contact.html" class="anton-regular btn btn-outline-danger border-0 fs-3">Contact</a>
                 </li>
                 </ul>
             </div>
@@ -109,7 +106,6 @@ $entries = $entries_res->fetch_assoc();
                                     <label>Medical Notes (Allergies, injuries)</label>
                                     <textarea class="form-control" name="medical_notes"><?php echo isset($health['medical_notes']) ? htmlspecialchars($health['medical_notes']) : ''; ?></textarea>
                                 </div>
-                                <button type="submit" class="btn btn-primary mt-3">Save Profile changes</button>
                                 <div class="mb-3">
                                     <label>Current Payment Method</label>
                                     <input type="text" class="form-control" value="<?php echo htmlspecialchars($user['payment_method']); ?>" readonly>
@@ -128,36 +124,70 @@ $entries = $entries_res->fetch_assoc();
                                     <label>New Password</label>
                                     <input type="password" class="form-control" name="new_password">
                                 </div>
-                                <h4 class="mt-4">Two-Factor Authentication</h4>
-                                <div class="form-check mb-3">
-                                    <input class="form-check-input" type="checkbox" name="enable_2fa" value="1" <?php echo ($user['two_fa_pin']) ? 'checked' : ''; ?>>
-                                    <label class="form-check-label">Enable 4-Digit Security PIN for Logins</label>
-                                </div>
-                                <div class="mb-3">
-                                    <label>4-Digit PIN</label>
-                                    <input type="text" class="form-control" name="two_fa_pin" maxlength="4" value="<?php echo htmlspecialchars($user['two_fa_pin'] ?? ''); ?>">
-                                </div>
-                                <button type="submit" class="btn btn-primary mt-3">Update Security</button>
+                                <button type="submit" class="btn btn-primary mt-2">Update Password</button>
                             </form>
+
+                            <hr class="my-4">
+
+                            <h4>Two-Step Verification</h4>
+                            <p class="text-muted">Add an extra layer of security to your account.</p>
+
+                            <form action="../actions/setup_2fa.php" method="POST">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="two_fa_method" value="none" id="2fa_none" <?php echo ($user['two_fa_method'] === 'none' || !$user['two_fa_method']) ? 'checked' : ''; ?>>
+                                    <label class="form-check-label" for="2fa_none">
+                                        <strong>Disabled</strong> — No two-step verification
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="two_fa_method" value="email" id="2fa_email" <?php echo ($user['two_fa_method'] === 'email') ? 'checked' : ''; ?>>
+                                    <label class="form-check-label" for="2fa_email">
+                                        <i class='bx bx-envelope' style="color:#dc3545;"></i>
+                                        <strong>Email Verification</strong> — A 6-digit code will be sent to your email on every login
+                                    </label>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="two_fa_method" value="google_auth" id="2fa_google" <?php echo ($user['two_fa_method'] === 'google_auth') ? 'checked' : ''; ?>>
+                                    <label class="form-check-label" for="2fa_google">
+                                        <i class='bx bx-shield-quarter' style="color:#dc3545;"></i>
+                                        <strong>Google Authenticator</strong> — Use the Google/Microsoft Authenticator app
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn-danger mt-2">Save 2FA Settings</button>
+                            </form>
+
+                            <?php if ($user['two_fa_method'] === 'google_auth' && $user['totp_secret']): ?>
+                            <?php include '../../config/totp.php'; ?>
+                            <div class="mt-4 p-3 border rounded bg-light">
+                                <h5>Google Authenticator Setup</h5>
+                                <p class="text-muted mb-2">Scan this QR code with Google Authenticator or Microsoft Authenticator:</p>
+                                <div class="text-center">
+                                    <img src="<?php echo TOTP::getQRCodeUrl($user['email'], $user['totp_secret']); ?>" alt="QR Code" class="img-fluid border rounded p-1">
+                                </div>
+                                <p class="text-center mt-2"><small>Secret key: <code><?php echo $user['totp_secret']; ?></code></small></p>
+                            </div>
+                            <?php endif; ?>
                             <h4 class="mt-5">Login History</h4>
-                            <table class="table table-striped mt-3">
-                                <thead>
-                                    <tr>
-                                        <th>Time</th>
-                                        <th>IP Address</th>
-                                        <th>Device</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $log_res = $conn->query("SELECT * FROM login_history WHERE user_id='$user_id' ORDER BY attempt_time DESC LIMIT 5");
-                                    while($log = $log_res->fetch_assoc()) {
-                                        echo "<tr><td>{$log['attempt_time']}</td><td>{$log['ip_address']}</td><td>{$log['device_info']}</td></tr>";
-                                    }
-                                    if($log_res->num_rows == 0) echo "<tr><td colspan='3'>No login history found.</td></tr>";
-                                    ?>
-                                </tbody>
-                            </table>
+                            <div style="max-height: 250px; overflow-y: auto;" class="border rounded bg-light">
+                                <table class="table table-striped mb-0">
+                                    <thead style="position: sticky; top: 0; background-color: #fff; z-index: 1;">
+                                        <tr>
+                                            <th>Time</th>
+                                            <th>IP Address</th>
+                                            <th>Device</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $log_res = $conn->query("SELECT * FROM login_history WHERE user_id='$user_id' ORDER BY attempt_time DESC");
+                                        while($log = $log_res->fetch_assoc()) {
+                                            echo "<tr><td>{$log['attempt_time']}</td><td>{$log['ip_address']}</td><td>{$log['device_info']}</td></tr>";
+                                        }
+                                        if($log_res->num_rows == 0) echo "<tr><td colspan='3'>No login history found.</td></tr>";
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                         <!-- ENTRANCE SECTION -->
@@ -176,6 +206,42 @@ $entries = $entries_res->fetch_assoc();
                         <!-- SUPPORT SECTION -->
                         <div id="section-support" class="dashboard-section" style="display: none;">
                             <h2 class="anton-regular mb-4">Support & Tickets</h2>
+                            <?php if(isset($_GET['view_ticket'])): 
+                                $tid = intval($_GET['view_ticket']);
+                                $viewing_ticket = $conn->query("SELECT * FROM tickets WHERE id=$tid AND user_id=$user_id")->fetch_assoc();
+                                if($viewing_ticket):
+                                    $msg_res = $conn->query("SELECT * FROM ticket_messages WHERE ticket_id=$tid ORDER BY created_at ASC");
+                            ?>
+                                <div class="mb-3">
+                                    <a href="Account.php" class="btn btn-outline-secondary btn-sm">← Back to Tickets</a>
+                                </div>
+                                <h4>Ticket #<?php echo $viewing_ticket['id']; ?>: <?php echo htmlspecialchars($viewing_ticket['subject']); ?></h4>
+                                <p>Status: <span class="badge <?php echo $viewing_ticket['status'] === 'Closed' ? 'bg-success' : 'bg-warning text-dark'; ?>"><?php echo $viewing_ticket['status']; ?></span></p>
+
+                                <div style="max-height: 400px; overflow-y: auto; margin-bottom: 20px;">
+                                    <?php while($m = $msg_res->fetch_assoc()): ?>
+                                        <div style="margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">
+                                            <strong><?php echo $m['sender_type']; ?>:</strong>
+                                            <p style="margin: 5px 0;"><?php echo nl2br(htmlspecialchars($m['message'])); ?></p>
+                                            <small style="color: gray;"><?php echo $m['created_at']; ?></small>
+                                        </div>
+                                    <?php endwhile; ?>
+                                </div>
+
+                                <?php if($viewing_ticket['status'] !== 'Closed'): ?>
+                                <form action="../actions/reply_ticket.php" method="POST">
+                                    <input type="hidden" name="ticket_id" value="<?php echo $viewing_ticket['id']; ?>">
+                                    <div class="mb-3">
+                                        <textarea class="form-control" name="message" rows="3" placeholder="Type your reply..." required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Send Reply</button>
+                                </form>
+                                <?php else: ?>
+                                <div class="alert alert-info">This ticket is closed. If you need further assistance, please open a new ticket.</div>
+                                <?php endif; ?>
+                                
+                            <?php else: echo "<p>Ticket not found.</p><a href='Account.php' class='btn btn-outline-secondary'>Back</a>"; endif; ?>
+                            <?php else: ?>
                             <button class="btn btn-outline-danger mb-4" onclick="document.getElementById('newTicketForm').style.display='block'">+ Create New Ticket</button>
                             
                             <form id="newTicketForm" action="../actions/create_ticket.php" method="POST" style="display: none;" class="mb-4 p-3 border rounded">
@@ -199,6 +265,7 @@ $entries = $entries_res->fetch_assoc();
                                         <th>Subject</th>
                                         <th>Status</th>
                                         <th>Date</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -207,15 +274,17 @@ $entries = $entries_res->fetch_assoc();
                                     while($ticket = $ticket_res->fetch_assoc()) {
                                         echo "<tr>
                                             <td>#{$ticket['id']}</td>
-                                            <td>{$ticket['subject']}</td>
+                                            <td>" . htmlspecialchars($ticket['subject']) . "</td>
                                             <td>{$ticket['status']}</td>
                                             <td>{$ticket['created_at']}</td>
+                                            <td><a href='?view_ticket={$ticket['id']}' class='btn btn-sm btn-info text-white'>View</a></td>
                                         </tr>";
                                     }
-                                    if($ticket_res->num_rows == 0) echo "<tr><td colspan='4'>You have no tickets.</td></tr>";
+                                    if($ticket_res->num_rows == 0) echo "<tr><td colspan='5'>You have no tickets.</td></tr>";
                                     ?>
                                 </tbody>
                             </table>
+                            <?php endif; ?>
                         </div>
 
                     </div>
@@ -244,8 +313,18 @@ $entries = $entries_res->fetch_assoc();
             // Update active state in sidebar
             const tabs = document.querySelectorAll('#dashboardTabs .list-group-item');
             tabs.forEach(tab => tab.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            // We use JS event if clicked, or manual activation for onload
+            if(event && event.currentTarget && event.currentTarget.classList) {
+                event.currentTarget.classList.add('active');
+            }
         }
+
+        <?php if(isset($_GET['view_ticket'])): ?>
+            showSection('support');
+            // manually set the active tab
+            document.querySelectorAll('#dashboardTabs .list-group-item').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('#dashboardTabs .list-group-item')[3].classList.add('active');
+        <?php endif; ?>
     </script>
 </body>
 </html>

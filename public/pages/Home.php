@@ -82,13 +82,7 @@
             <a href="Home.php" class="anton-regular btn btn-outline-danger border-0 fs-3">Home</a>
           </li>
           <li class="nav-item me-lg-5 mb-md-2">
-            <a class="anton-regular btn btn-outline-danger border-0 fs-3"
-              href="Store.php">
-              Store
-            </a>
-          </li>
-          <li class="nav-item me-lg-5 mb-md-2">
-            <a href="About.php" class="anton-regular btn btn-outline-danger border-0 fs-3">About</a>
+            <a href="About.html" class="anton-regular btn btn-outline-danger border-0 fs-3">About</a>
           </li>
           <li class="nav-item me-lg-5 mb-md-2">
             <a href="Contact.php" class="anton-regular btn btn-outline-danger border-0 fs-3">Contact</a>
@@ -152,7 +146,6 @@
                     <p class="fs-5 mt-3">
                       Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolorem ipsa ipsam quidem perspiciatis cupiditate laboriosam at rerum quod nesciunt voluptatem corrupti, vitae laudantium commodi facilis hic alias doloremque quaerat? Delectus sequi veritatis, et quaerat unde dolorum nulla amet ducimus eius libero modi! Porro quasi nam, explicabo, consequuntur, maiores corrupti modi ut quo ea maxime inventore cumque eum eaque vel harum nesciunt culpa reprehenderit debitis. Consequatur minima velit asperiores laborum eum nemo iste temporibus beatae similique impedit. Asperiores sed repellat adipisci reiciendis minus ad consequatur magni error, vero dolorem porro quidem eum voluptatibus facilis. Animi, molestiae sed modi praesentium cum eveniet?
                     </p>
-                    <a href="store.html" class="btn btn-outline-light mt-3 px-4">Shop Now</a>
                   </div>
 
                   <div class="col-12 col-md-6 d-flex justify-content-center px-3 mt-sm-5">
@@ -176,7 +169,6 @@
                     <p class="fs-5 mt-3">
                       Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus eius laudantium a mollitia veniam fuga assumenda, porro nulla incidunt ex architecto quas cum perferendis iusto harum modi culpa facere sapiente ullam sit voluptates molestias saepe? Porro fugit aut vero minima perspiciatis odio incidunt, praesentium ab. Soluta tenetur fugit fugiat facilis.
                     </p>
-                    <a href="store.php" class="btn btn-outline-light mt-3 px-4">Shop Now</a>
                   </div>
 
                   <div class="col-12 col-md-6 d-flex justify-content-center px-3 mt-sm-5">
@@ -201,7 +193,6 @@
                     <p class="fs-5 mt-3">
                       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Animi soluta voluptatibus laborum quas aut quam non explicabo! Amet soluta repellat expedita iusto nihil beatae ullam labore vitae veniam? Similique, cupiditate.
                     </p>
-                    <a href="store.php" class="btn btn-outline-light mt-3 px-4">Shop Now</a>
                   </div>
                   <div class="col-12 col-md-6 d-flex justify-content-center px-3 mt-sm-5">
                     <div class="video-wrapper w-100" style="max-width: 800px; height: 800px; position: relative;">
@@ -390,7 +381,7 @@
     <!-- welcome section start -->
     <section class="about bg-light-subtle row m-0 p-0 d-flex flex-column align-items-center py-5">
       <div class="welcomeIMG col-12 " style="max-width: 800px; max-height: 600px;">
-        <img src="assets\gym\samuel-girven-fqMu99l8sqo-unsplash.jpg" alt="Gym Image" class="w-100 h-100 object-fit-cover rounded-5 shadow-lg">
+        <img src="../assets/gym/samuel-girven-fqMu99l8sqo-unsplash.jpg" alt="Gym Image" class="w-100 h-100 object-fit-cover rounded-5 shadow-lg">
       </div>
       <div class="textinfo col-12">
         <h1 class="anton-regular text-uppercase text-center mt-5">a place where <span class="text-danger">everyone</span> feels welcome</h1>
