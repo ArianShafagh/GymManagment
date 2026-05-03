@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="row w-100">
                     <div class="card col-md-6 offset-md-3 p-4" style="background-color: rgba(255, 255, 255, 0.8);">
                         <h2 class="anton-regular text-center mb-4">Login</h2>
-                        <form action="" method="POST">
+                        <form id="loginForm" action="" method="POST">
                             <div class="mb-3">
                                 <label class="form-label">Email address</label>
                                 <input type="email" name="email" class="form-control" id="email" placeholder="Enter your email" required>
@@ -101,7 +101,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <label class="form-label">Password</label>
                                 <input type="password" name="password" class="form-control" id="password" placeholder="Enter your password" required>
                             </div>
-                            <button type="submit" class="btn btn-primary w-25 d-block mx-auto">Login</button>
+                            <button type="submit" class="btn btn-primary w-25 d-block mx-auto g-recaptcha" 
+                            data-sitekey="<?php echo htmlspecialchars(getenv('ENCRYPT_SITE_KEY')); ?>" 
+                            data-callback="onSubmit" 
+                            data-size="invisible">Login</button>
                             <a href="Join.php" class="d-block text-center mt-3">Not a member? Join now</a>
                         </form>
                     </div>
@@ -109,8 +112,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </section>
     </div>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
     <script src="../bootstrap/jquery-3.6.0.min.js"></script>
     <script src="../bootstrap/popper.min.js"></script>
     <script src="../bootstrap/bootstrap.min.js"></script>
+    <script>
+   function onSubmit(token) {
+             document.getElementById("loginForm").submit();
+   }
+ </script>
 </body>
 </html>

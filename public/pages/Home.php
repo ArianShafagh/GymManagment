@@ -1,5 +1,6 @@
 <?php
   session_start();
+  // include '../../config/mailtrapTest.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,9 +84,6 @@
           </li>
           <li class="nav-item me-lg-5 mb-md-2">
             <a href="About.html" class="anton-regular btn btn-outline-danger border-0 fs-3">About</a>
-          </li>
-          <li class="nav-item me-lg-5 mb-md-2">
-            <a href="Contact.php" class="anton-regular btn btn-outline-danger border-0 fs-3">Contact</a>
           </li>
         </ul>
       </div>
@@ -315,7 +313,7 @@
                 <div class="col-12 col-md-6 overflow-hidden" style="max-width: 800px; max-height: 800px;">
                   <div class="rounded-5 overflow-hidden shadow-lg">
                     <img 
-                      src="../assets/generic_graphic_0.webp" 
+                      src="../assets/generic_graphic_0.png" 
                       class="object-fit-cover w-100 h-100"
                       alt="New Gym App"
                       style="object-fit: cover;"
@@ -348,7 +346,7 @@
                 <div class="col-12 col-md-6 overflow-hidden" style="max-width: 800px; max-height: 800px;">
                   <div class="rounded-5 overflow-hidden shadow-lg">
                     <img 
-                      src="../assets/TSC_2368-1.avif" 
+                      src="../assets/nba.avif" 
                       class="object-fit-cover h-100 w-100"
                       alt="New Gym App"
                       style="object-fit: cover;"

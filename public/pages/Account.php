@@ -46,7 +46,7 @@ $entries = $entries_res->fetch_assoc();
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-black p-2 border-bottom border-danger pb-3">
             <!-- Logo -->
-            <a class="navbar-brand d-flex flex-row align-items-end me-lg-5 ms-lg-5 me-sm-5 ms-sm-5" href="home.html">
+            <a class="navbar-brand d-flex flex-row align-items-end me-lg-5 ms-lg-5 me-sm-5 ms-sm-5" href="home.php">
                 <img src="../assets/download.png" alt="logo">
                 <p class="bbh-bartle-regular text-danger fst-italic">Dashboard</p>
             </a>

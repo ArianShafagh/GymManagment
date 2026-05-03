@@ -1,12 +1,18 @@
 <?php
 include '../../config/db.php';
+include '../../config/Recaptcha_verify.php';
 
 session_start();
 $errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
     // Retrieve form data
+    $verifyResponse = isValid($_POST['g-recaptcha-response']);
+    if ($verifyResponse === false) {
+        $errors[] = "Please verify you are not a robot.";
+    }
     $name = $_POST['name'] ?? '';
     $lastname = $_POST['lastname'] ?? '';
     $dob = $_POST['dob'] ?? '';
@@ -255,7 +261,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             </label>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary w-25 d-block mx-auto mt-3 text-nowrap">Register</button>
+                                    <button type="submit" 
+                                    class="btn btn-primary w-25 d-block mx-auto mt-3 text-nowrap g-recaptcha" 
+                                    data-sitekey="<?php echo htmlspecialchars(getenv('ENCRYPT_SITE_KEY')); ?>"
+                                    data-callback="onSubmit"
+                                    data-size="invisible"
+                                    >Register</button>
                                     <a href="Login.php" class="d-block text-center mt-3">Already a member? Login now</a>
                             </div>
                         </div>
@@ -273,8 +284,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
 
     <script src="../js/Join.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
     <script src="../bootstrap/jquery-3.6.0.min.js"></script>
     <script src="../bootstrap/popper.min.js"></script>
     <script src="../bootstrap/bootstrap.min.js"></script>
+    <script>
+   function onSubmit(token) {
+             document.getElementById("joinForm").submit();
+   }
+ </script>
 </body>
 </html>

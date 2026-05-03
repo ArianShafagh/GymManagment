@@ -1,0 +1,20 @@
+[2026-05-03 09:07:06] FAILED - Unauthorized. Make sure you are sending correct credentials with the request before retrying. Errors: Unauthorized. | To: arian.shafagh2003@gmail.com | Subject: Your Bull Gym Verification Code
+[2026-05-03 09:19:47] FAILED - Unauthorized. Make sure you are sending correct credentials with the request before retrying. Errors: Unauthorized. | To: arian.shafagh2003@gmail.com | OTP: 965023
+[2026-05-03 09:35:45] VERIFY ATTEMPT
+Submitted code: '618960' (type: string, len: 6)
+Stored OTP:     '618960' (type: string, len: 6)
+Match: YES
+OTP expires at: 2026-05-03 09:45:25
+Expiry timestamp: 1777801525
+Current time():   1777800945
+Expired: NO (still valid)
+
+[2026-05-03 13:12:25] VERIFY ATTEMPT
+Submitted code: '510643' (type: string, len: 6)
+Stored OTP:     '510643' (type: string, len: 6)
+Match: YES
+OTP expires at: 2026-05-03 13:22:11
+Expiry timestamp: 1777814531
+Current time():   1777813945
+Expired: NO (still valid)
+

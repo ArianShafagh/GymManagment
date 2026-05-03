@@ -161,9 +161,8 @@ if (isset($_GET['edit_user'])) {
                             <div class="col-md-3">
                                 <label class="text-muted" style="font-size:12px;">Subscription</label>
                                 <select name="subscription_type" class="form-control form-control-dark">
-                                    <option value="Basic" <?php echo $editing_user['subscription_type']=='Basic'?'selected':''; ?>>Basic</option>
-                                    <option value="Premium" <?php echo $editing_user['subscription_type']=='Premium'?'selected':''; ?>>Premium</option>
-                                    <option value="VIP" <?php echo $editing_user['subscription_type']=='VIP'?'selected':''; ?>>VIP</option>
+                                    <option value="Pro+" <?php echo $editing_user['subscription_type']=='Premium'?'selected':''; ?>>Pro+</option>
+                                    <option value="Classic" <?php echo $editing_user['subscription_type']=='VIP'?'selected':''; ?>>Classic</option>
                                 </select>
                             </div>
                             <div class="col-md-3">

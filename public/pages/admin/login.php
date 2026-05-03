@@ -2,11 +2,9 @@
 ob_start();
 session_start();
 
-// If already logged in as admin, redirect to dashboard
-if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
-    header("Location: dashboard.php");
-    exit();
-}
+// Restrict admin area to allowed IPs (adjust ADMIN_ALLOWED_IPS env or the default list in config/admin_guard.php)
+include_once __DIR__ . '/../../../config/admin_guard.php';
+check_admin_ip_or_die();
 
 // Static admin credentials
 $ADMIN_USER = 'admin';
