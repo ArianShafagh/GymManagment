@@ -18,3 +18,57 @@ Expiry timestamp: 1777814531
 Current time():   1777813945
 Expired: NO (still valid)
 
+[2026-05-03 19:53:11] VERIFY ATTEMPT
+Submitted code: '190300' (type: string, len: 6)
+Stored OTP:     '190300' (type: string, len: 6)
+Match: YES
+OTP expires at: 2026-05-03 20:02:53
+Expiry timestamp: 1777838573
+Current time():   1777837991
+Expired: NO (still valid)
+
+[2026-05-04 06:38:52] VERIFY ATTEMPT
+Submitted code: '182049' (type: string, len: 6)
+Stored OTP:     '182049' (type: string, len: 6)
+Match: YES
+OTP expires at: 2026-05-04 06:48:38
+Expiry timestamp: 1777877318
+Current time():   1777876732
+Expired: NO (still valid)
+
+[2026-05-04 07:05:50] VERIFY ATTEMPT
+Submitted code: '343028' (type: string, len: 6)
+Stored OTP:     '343028' (type: string, len: 6)
+Match: YES
+OTP expires at: 2026-05-04 07:15:07
+Expiry timestamp: 1777878907
+Current time():   1777878350
+Expired: NO (still valid)
+
+[2026-05-04 07:34:52] VERIFY ATTEMPT
+Submitted code: '343028' (type: string, len: 6)
+Stored OTP:     '605126' (type: string, len: 6)
+Match: NO
+OTP expires at: 2026-05-04 07:44:36
+Expiry timestamp: 1777880676
+Current time():   1777880092
+Expired: NO (still valid)
+
+[2026-05-04 07:35:01] VERIFY ATTEMPT
+Submitted code: '605126' (type: string, len: 6)
+Stored OTP:     '605126' (type: string, len: 6)
+Match: YES
+OTP expires at: 2026-05-04 07:44:36
+Expiry timestamp: 1777880676
+Current time():   1777880101
+Expired: NO (still valid)
+
+[2026-05-04 07:55:48] VERIFY ATTEMPT
+Submitted code: '907825' (type: string, len: 6)
+Stored OTP:     '907825' (type: string, len: 6)
+Match: YES
+OTP expires at: 2026-05-04 08:05:23
+Expiry timestamp: 1777881923
+Current time():   1777881348
+Expired: NO (still valid)
+

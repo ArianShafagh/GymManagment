@@ -9,7 +9,7 @@ $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Retrieve form data
-    $verifyResponse = isValid($_POST['g-recaptcha-response']);
+    $verifyResponse = isValid($_POST['g-recaptcha-response'] ?? null, 0.5, 'register');
     if ($verifyResponse === false) {
         $errors[] = "Please verify you are not a robot.";
     }
@@ -262,10 +262,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </div>
                                     </div>
                                     <button type="submit" 
-                                    class="btn btn-primary w-25 d-block mx-auto mt-3 text-nowrap g-recaptcha" 
-                                    data-sitekey="<?php echo htmlspecialchars(getenv('ENCRYPT_SITE_KEY')); ?>"
-                                    data-callback="onSubmit"
-                                    data-size="invisible"
+                                    class="btn btn-primary w-25 d-block mx-auto mt-3 text-nowrap" 
+                                    id="joinSubmit"
                                     >Register</button>
                                     <a href="Login.php" class="d-block text-center mt-3">Already a member? Login now</a>
                             </div>
@@ -284,14 +282,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
 
     <script src="../js/Join.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js"></script>
-    <script src="../bootstrap/jquery-3.6.0.min.js"></script>
-    <script src="../bootstrap/popper.min.js"></script>
-    <script src="../bootstrap/bootstrap.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=<?php echo htmlspecialchars(getenv('ENCRYPT_SITE_KEY')); ?>"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
     <script>
-   function onSubmit(token) {
-             document.getElementById("joinForm").submit();
-   }
- </script>
+    document.getElementById('joinForm').addEventListener('submit', function(e){
+        e.preventDefault();
+        grecaptcha.ready(function(){
+            grecaptcha.execute('<?php echo htmlspecialchars(getenv('ENCRYPT_SITE_KEY')); ?>', {action: 'register'}).then(function(token){
+                var f = document.getElementById('joinForm');
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'g-recaptcha-response';
+                input.value = token;
+                f.appendChild(input);
+                f.submit();
+            });
+        });
+    });
+    </script>
 </body>
 </html>

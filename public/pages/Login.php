@@ -2,11 +2,19 @@
 // Start the session
 session_start();
 include("../../config/db.php");
+include("../../config/Recaptcha_verify.php");
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $email = $_POST['email'];
     $password = $_POST['password'];
+
+    // Verify reCAPTCHA v3 token
+    $recaptcha_ok = isValid($_POST['g-recaptcha-response'] ?? null, 0.5, 'login');
+    if (!$recaptcha_ok) {
+        echo "<script>alert('reCAPTCHA verification failed. Please try again.');</script>";
+        exit();
+    }
 
     $sql = "SELECT * FROM users WHERE email = '$email'";
     $result = mysqli_query($conn, $sql);
@@ -101,10 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <label class="form-label">Password</label>
                                 <input type="password" name="password" class="form-control" id="password" placeholder="Enter your password" required>
                             </div>
-                            <button type="submit" class="btn btn-primary w-25 d-block mx-auto g-recaptcha" 
-                            data-sitekey="<?php echo htmlspecialchars(getenv('ENCRYPT_SITE_KEY')); ?>" 
-                            data-callback="onSubmit" 
-                            data-size="invisible">Login</button>
+                            <button type="submit" class="btn btn-primary w-25 d-block mx-auto" id="loginSubmit">Login</button>
                             <a href="Join.php" class="d-block text-center mt-3">Not a member? Join now</a>
                         </form>
                     </div>
@@ -112,14 +117,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </section>
     </div>
-    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=<?php echo htmlspecialchars(getenv('ENCRYPT_SITE_KEY')); ?>"></script>
     <script src="../bootstrap/jquery-3.6.0.min.js"></script>
     <script src="../bootstrap/popper.min.js"></script>
     <script src="../bootstrap/bootstrap.min.js"></script>
     <script>
-   function onSubmit(token) {
-             document.getElementById("loginForm").submit();
-   }
- </script>
+    document.getElementById('loginForm').addEventListener('submit', function(e){
+        e.preventDefault();
+        grecaptcha.ready(function(){
+            grecaptcha.execute('<?php echo htmlspecialchars(getenv('ENCRYPT_SITE_KEY')); ?>', {action: 'login'}).then(function(token){
+                var f = document.getElementById('loginForm');
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'g-recaptcha-response';
+                input.value = token;
+                f.appendChild(input);
+                f.submit();
+            });
+        });
+    });
+    </script>
 </body>
 </html>

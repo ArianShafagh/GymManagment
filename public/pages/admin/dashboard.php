@@ -68,38 +68,7 @@ if (isset($_GET['edit_user'])) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=BBH+Bartle&display=swap" rel="stylesheet">
-    <style>
-        body { background: #111; color: #eee; font-family: Arial, sans-serif; }
-        .admin-nav { background: #0a0a0a; border-bottom: 2px solid #dc3545; }
-        .admin-nav .navbar-brand { font-family: 'Anton', sans-serif; color: #dc3545 !important; letter-spacing: 2px; }
-        .admin-nav .nav-link { color: #aaa !important; font-size: 14px; }
-        .admin-nav .nav-link:hover, .admin-nav .nav-link.active { color: #dc3545 !important; }
-
-        .stat-card { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 20px; text-align: center; }
-        .stat-card h3 { color: #dc3545; font-family: 'Anton', sans-serif; font-size: 32px; margin: 0; }
-        .stat-card p { color: #888; margin: 5px 0 0; font-size: 13px; }
-
-        .admin-table { background: #1a1a1a; border-radius: 10px; overflow: hidden; }
-        .admin-table table { color: #ccc; margin: 0; }
-        .admin-table thead { background: #222; }
-        .admin-table thead th { color: #dc3545; font-size: 13px; text-transform: uppercase; border: none; padding: 12px 10px; }
-        .admin-table tbody td { border-color: #2a2a2a; padding: 10px; font-size: 13px; vertical-align: middle; }
-        .admin-table tbody tr:hover { background: #222; }
-
-        .tab-btn { background: #1a1a1a; border: 1px solid #333; color: #aaa; padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-size: 14px; }
-        .tab-btn:hover, .tab-btn.active { background: #dc3545; color: #fff; border-color: #dc3545; }
-
-        .admin-card { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 25px; }
-        .form-control-dark { background: #222; border: 1px solid #444; color: #eee; }
-        .form-control-dark:focus { background: #222; color: #eee; border-color: #dc3545; box-shadow: 0 0 0 0.15rem rgba(220,53,69,0.2); }
-
-        .badge-open { background: #dc3545; }
-        .badge-closed { background: #198754; }
-        .badge-progress { background: #ffc107; color: #000; }
-
-        .msg-user { background: #1e2a3a; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
-        .msg-admin { background: #2a1e1e; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
-    </style>
+    <link rel="stylesheet" href="../../css/admin/dashboard.css">
 </head>
 <body>
     <!-- ADMIN NAVBAR -->
@@ -232,7 +201,7 @@ if (isset($_GET['edit_user'])) {
                             <td><?php echo $u['id']; ?></td>
                             <td><?php echo htmlspecialchars($u['first_name'] . ' ' . $u['last_name']); ?></td>
                             <td><?php echo htmlspecialchars($u['email']); ?></td>
-                            <td><span class="badge bg-secondary"><?php echo $u['subscription_type']; ?></span></td>
+                            <td><span class="badge"><?php echo $u['subscription_type']; ?></span></td>
                             <td><?php echo $u['start_date']; ?></td>
                             <td><?php echo $u['end_date']; ?></td>
                             <td><?php echo $u['two_fa_method'] ?: 'none'; ?></td>

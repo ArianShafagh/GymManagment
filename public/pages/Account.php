@@ -50,12 +50,12 @@ $entries = $entries_res->fetch_assoc();
                 <img src="../assets/download.png" alt="logo">
                 <p class="bbh-bartle-regular text-danger fst-italic">Dashboard</p>
             </a>
-            <button class="navbar-toggler position-static me-lg-5 ms-lg-5 me-sm-5 ms-sm-5" type="button" data-toggle="collapse" data-target="#DashboardNav">
+            <button class="navbar-toggler position-static me-lg-5 ms-lg-5 me-sm-5 ms-sm-5" type="button" data-toggle="collapse" id="DashboardNavToggle" data-target="#DashboardNav" aria-controls="DashboardNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse justify-content-around" id="DashboardNav">
-                <ul class="navbar-nav d-flex flex-lg-row flex-md-column mt-3 ">
+                        <ul class="navbar-nav d-flex flex-lg-row flex-md-column mt-3 ">
                 <li class="nav-item justify-content-center me-lg-5 mb-md-2">
                     <a href="home.php" class="anton-regular btn btn-outline-danger border-0 fs-3">Home</a>
                 </li>
@@ -73,10 +73,10 @@ $entries = $entries_res->fetch_assoc();
                     <div class="listOfOptions p-4 w-25 align-items-start">
                         <h2 class="anton-regular text-center mb-4">Account Settings</h2>
                         <ul class="list-group" id="dashboardTabs">
-                            <li class="list-group-item active" style="cursor: pointer;" onclick="showSection('profile')">Profile & Account</li>
-                            <li class="list-group-item" style="cursor: pointer;" onclick="showSection('security')">Privacy & Security</li>
-                            <li class="list-group-item" style="cursor: pointer;" onclick="showSection('entrance')">Gym Entrance (QR)</li>
-                            <li class="list-group-item" style="cursor: pointer;" onclick="showSection('support')">Support & Tickets</li>
+                            <li class="list-group-item active" style="cursor: pointer;" onclick="showSection('profile', this)">Profile & Account</li>
+                            <li class="list-group-item" style="cursor: pointer;" onclick="showSection('security', this)">Privacy & Security</li>
+                            <li class="list-group-item" style="cursor: pointer;" onclick="showSection('entrance', this)">Gym Entrance (QR)</li>
+                            <li class="list-group-item" style="cursor: pointer;" onclick="showSection('support', this)">Support & Tickets</li>
                             <li class="list-group-item"><a href="Logout.php" class="text-danger text-decoration-none">Logout</a></li>
                         </ul>
                     </div>
@@ -100,6 +100,11 @@ $entries = $entries_res->fetch_assoc();
                                 <div class="mb-3">
                                     <label>Email (Read-only)</label>
                                     <input type="email" class="form-control" value="<?php echo htmlspecialchars($user['email']); ?>" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Subscription Plan</label>
+                                    <input type="text" class="form-control" value="<?php echo htmlspecialchars($user['subscription_plan']); ?>" readonly>
+                                    <small class="text-muted">for changes, please contact support.</small>
                                 </div>
                                 <h4 class="mt-4">Health Conditions</h4>
                                 <div class="mb-3">
@@ -298,24 +303,25 @@ $entries = $entries_res->fetch_assoc();
         </section>
 
 
-    <script src="../bootstrap/jquery-3.6.0.min.js"></script>
-    <script src="../bootstrap/popper.min.js"></script>
-    <script src="../bootstrap/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
     <script>
-        function showSection(sectionId) {
+        function showSection(sectionId, el) {
             // Hide all sections
             const sections = document.querySelectorAll('.dashboard-section');
             sections.forEach(sec => sec.style.display = 'none');
-            
+
             // Show requested section
-            document.getElementById('section-' + sectionId).style.display = 'block';
-            
+            const target = document.getElementById('section-' + sectionId);
+            if (target) target.style.display = 'block';
+
             // Update active state in sidebar
             const tabs = document.querySelectorAll('#dashboardTabs .list-group-item');
             tabs.forEach(tab => tab.classList.remove('active'));
-            // We use JS event if clicked, or manual activation for onload
-            if(event && event.currentTarget && event.currentTarget.classList) {
-                event.currentTarget.classList.add('active');
+            if (el && el.classList) {
+                el.classList.add('active');
             }
         }
 

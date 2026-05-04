@@ -38,49 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=BBH+Bartle&display=swap" rel="stylesheet">
-    <style>
-        body { margin: 0; padding: 0; font-family: 'Anton', sans-serif; }
-        .admin-login-bg {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a0505 50%, #0a0a0a 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .admin-card {
-            background: rgba(20, 20, 20, 0.95);
-            border: 1px solid #333;
-            border-radius: 16px;
-            padding: 40px;
-            max-width: 420px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-        }
-        .admin-card h2 { color: #dc3545; letter-spacing: 2px; }
-        .admin-card .form-control {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: #fff;
-            padding: 12px 15px;
-        }
-        .admin-card .form-control:focus {
-            border-color: #dc3545;
-            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
-            background: #1a1a1a;
-            color: #fff;
-        }
-        .admin-card label { color: #aaa; font-family: Arial, sans-serif; font-size: 14px; }
-        .btn-admin {
-            background: #dc3545;
-            border: none;
-            color: #fff;
-            padding: 12px;
-            font-size: 16px;
-            letter-spacing: 1px;
-            transition: background 0.3s;
-        }
-        .btn-admin:hover { background: #b02a37; color: #fff; }
-    </style>
+    <link rel="stylesheet" href="../../css/admin/login.css">
 </head>
 <body>
     <div class="admin-login-bg">
