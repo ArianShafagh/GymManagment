@@ -16,11 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 
-    $sql = "SELECT * FROM users WHERE email = '$email'";
-    $result = mysqli_query($conn, $sql);
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
+    $stmt->execute([$email]);
     
-    if ($result && mysqli_num_rows($result) == 1) {
-        $row = mysqli_fetch_assoc($result);
+    if ($stmt && $stmt->rowCount() == 1) {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $passwordFromDB = $row['password'];
     
         if (password_verify($password, $passwordFromDB)){
@@ -35,7 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     include("../../config/mailtrap.php");
                     $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
                     $expires = date('Y-m-d H:i:s', time() + 600);
-                    $conn->query("UPDATE users SET email_otp='$otp', email_otp_expires='$expires' WHERE id='{$row['id']}'");
+                    $upd = $conn->prepare("UPDATE users SET email_otp = ?, email_otp_expires = ? WHERE id = ?");
+                    $upd->execute([$otp, $expires, $row['id']]);
                     sendOTPEmail($row['email'], $row['first_name'], $otp);
                 }
 
@@ -48,7 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['user_email'] = $row['email'];
             $ip = $_SERVER['REMOTE_ADDR'];
             $device = $_SERVER['HTTP_USER_AGENT'];
-            $conn->query("INSERT INTO login_history (user_id, ip_address, device_info) VALUES ('{$row['id']}', '$ip', '$device')");
+            $ins = $conn->prepare("INSERT INTO login_history (user_id, ip_address, device_info) VALUES (?,?,?)");
+            $ins->execute([$row['id'], $ip, $device]);
             echo"<script>alert('Login successful!'); window.location.href = 'Account.php';</script>";
             exit();
         } else {
@@ -58,7 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo"<script>alert('Invalid email. Please try again.');</script>";
     }
 
-    mysqli_close($conn);
 }
 ?>
 <!DOCTYPE html>

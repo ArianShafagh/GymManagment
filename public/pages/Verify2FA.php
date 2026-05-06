@@ -4,28 +4,45 @@ session_start();
 include '../../config/db.php';
 include '../../config/totp.php';
 include '../../config/mailtrap.php';
+include '../../config/admin_guard.php';
 
-// Must have pending 2FA
-if (!isset($_SESSION['2fa_user_id'])) {
+// Must have pending 2FA for either a user or an admin login checking before accessing this page
+$isAdminPending = is_admin_2fa_pending();
+if (!$isAdminPending && !isset($_SESSION['2fa_user_id'])) {
     header("Location: Login.php");
     exit();
 }
 
-$user_id = $_SESSION['2fa_user_id'];
-$method = $_SESSION['2fa_method'];
+$method = $isAdminPending ? 'email' : ($_SESSION['2fa_method'] ?? '');
+$user = ['email' => '', 'first_name' => ''];
 
-$user_res = $conn->query("SELECT * FROM users WHERE id='$user_id'");
-$user = $user_res->fetch_assoc();
+if ($isAdminPending) {
+    $user['email'] = $_SESSION['admin_2fa_email'] ?? '';
+    $user['first_name'] = $_SESSION['admin_2fa_name'] ?? 'Admin';
+} else {
+    $user_id = $_SESSION['2fa_user_id'];
+    $ustmt = $conn->prepare("SELECT * FROM users WHERE id = ? LIMIT 1");
+    $ustmt->execute([$user_id]);
+    $user = $ustmt->fetch(PDO::FETCH_ASSOC);
+}
 
 $error = '';
 $success = '';
 
 // Handle resend for email method
 if (isset($_GET['resend']) && $method === 'email') {
-    $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-    $expires = date('Y-m-d H:i:s', time() + 600); // 10 minutes
-    $conn->query("UPDATE users SET email_otp='$otp', email_otp_expires='$expires' WHERE id='$user_id'");
-    sendOTPEmail($user['email'], $user['first_name'], $otp);
+    if ($isAdminPending) {
+        $otp = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $_SESSION['admin_2fa_code'] = $otp;
+        $_SESSION['admin_2fa_expires'] = time() + 600;
+        sendOTPEmail($user['email'], $user['first_name'], $otp);
+    } else {
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $expires = date('Y-m-d H:i:s', time() + 600);
+        $upd = $conn->prepare("UPDATE users SET email_otp = ?, email_otp_expires = ? WHERE id = ?");
+        $upd->execute([$otp, $expires, $user_id]);
+        sendOTPEmail($user['email'], $user['first_name'], $otp);
+    }
     $success = "A new code has been sent to your email.";
 }
 
@@ -33,10 +50,31 @@ if (isset($_GET['resend']) && $method === 'email') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $code = trim($_POST['code'] ?? '');
 
-    if ($method === 'email') {
+    if ($isAdminPending) {
+        $savedCode = $_SESSION['admin_2fa_code'] ?? '';
+        $expires = (int) ($_SESSION['admin_2fa_expires'] ?? 0);
+
+        if ($code === $savedCode && time() <= $expires) {
+            unset($_SESSION['admin_2fa_pending']);
+            unset($_SESSION['admin_2fa_code']);
+            unset($_SESSION['admin_2fa_expires']);
+            unset($_SESSION['admin_2fa_email']);
+            unset($_SESSION['admin_2fa_name']);
+
+            $_SESSION['is_admin'] = true;
+            $_SESSION['admin_user'] = 'admin';
+
+            header("Location: admin/dashboard.php");
+            exit();
+        } else {
+            $error = "Invalid or expired code. Please try again.";
+        }
+    // Regular user 2FA verification(email)
+    } elseif ($method === 'email') {
         // Verify email OTP
-        $res = $conn->query("SELECT email_otp, email_otp_expires FROM users WHERE id='$user_id'");
-        $row = $res->fetch_assoc();
+        $rstmt = $conn->prepare("SELECT email_otp, email_otp_expires FROM users WHERE id = ? LIMIT 1");
+        $rstmt->execute([$user_id]);
+        $row = $rstmt->fetch(PDO::FETCH_ASSOC);
 
         // DEBUG: Log the comparison values
         $debugLog = __DIR__ . '/../../mailtrap_debug.log';
@@ -52,7 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($row['email_otp'] === $code && strtotime($row['email_otp_expires']) > time()) {
             // Clear the OTP
-            $conn->query("UPDATE users SET email_otp=NULL, email_otp_expires=NULL WHERE id='$user_id'");
+            $clear = $conn->prepare("UPDATE users SET email_otp = NULL, email_otp_expires = NULL WHERE id = ?");
+            $clear->execute([$user_id]);
             
             // Complete login
             $_SESSION['user_email'] = $user['email'];
@@ -63,13 +102,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Log login
             $ip = $_SERVER['REMOTE_ADDR'];
             $device = $_SERVER['HTTP_USER_AGENT'];
-            $conn->query("INSERT INTO login_history (user_id, ip_address, device_info) VALUES ('$user_id', '$ip', '$device')");
+            $ins = $conn->prepare("INSERT INTO login_history (user_id, ip_address, device_info) VALUES (?,?,?)");
+            $ins->execute([$user_id, $ip, $device]);
             
             header("Location: Account.php");
             exit();
         } else {
             $error = "Invalid or expired code. Please try again.";
         }
+
+    // Regular user 2FA verification(Google Authenticator)
 
     } elseif ($method === 'google_auth') {
         // Verify TOTP
@@ -137,14 +179,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </a>
 
         <div class="verify-card text-center">
-            <?php if ($method === 'email'): ?>
+            <?php if ($isAdminPending): ?>
+                <i class='bx bx-shield-quarter' style="font-size: 50px; color: #dc3545;"></i>
+                <h2 class="anton-regular mt-3">Admin Email Verification</h2>
+                <p class="text-muted">We sent a 6-digit code to<br><strong><?php echo htmlspecialchars($user['email']); ?></strong></p>
+            <?php elseif ($method === 'email'): ?>
                 <i class='bx bx-envelope' style="font-size: 50px; color: #dc3545;"></i>
                 <h2 class="anton-regular mt-3">Email Verification</h2>
                 <p class="text-muted">We sent a 6-digit code to<br><strong><?php echo htmlspecialchars($user['email']); ?></strong></p>
             <?php else: ?>
                 <i class='bx bx-shield-quarter' style="font-size: 50px; color: #dc3545;"></i>
                 <h2 class="anton-regular mt-3">Authenticator Code</h2>
-                <p class="text-muted">Enter the 6-digit code from your<br><strong>Google Authenticator</strong> app</p>
+                <p class="text-muted">Enter the 6-digit code from your<br><strong>your Authenticator</strong> app</p>
             <?php endif; ?>
 
             <?php if ($error): ?>
@@ -161,7 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="btn btn-danger w-100 py-2 fs-5">Verify</button>
             </form>
 
-            <?php if ($method === 'email'): ?>
+            <?php if ($method === 'email' || $isAdminPending): ?>
                 <p class="mt-3 mb-0">
                     <a href="Verify2FA.php?resend=1" class="text-danger">Resend Code</a>
                 </p>

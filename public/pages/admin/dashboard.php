@@ -14,6 +14,7 @@ $users_res = $conn->query("
     LEFT JOIN health_conditions h ON u.id = h.user_id 
     ORDER BY u.id DESC
 ");
+$users = $users_res->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch all tickets
 $tickets_res = $conn->query("
@@ -31,21 +32,26 @@ $entries_res = $conn->query("
     ORDER BY g.scan_time DESC 
     LIMIT 100
 ");
+$tickets = $tickets_res->fetchAll(PDO::FETCH_ASSOC);
+$entries = $entries_res->fetchAll(PDO::FETCH_ASSOC);
 
 // Stats
-$total_users = $conn->query("SELECT COUNT(*) as c FROM users")->fetch_assoc()['c'];
-$total_entries_today = $conn->query("SELECT COUNT(*) as c FROM gym_entries WHERE DATE(scan_time) = CURDATE()")->fetch_assoc()['c'];
-$open_tickets = $conn->query("SELECT COUNT(*) as c FROM tickets WHERE status='Open'")->fetch_assoc()['c'];
+$total_users = $conn->query("SELECT COUNT(*) as c FROM users")->fetch(PDO::FETCH_ASSOC)['c'];
+$total_entries_today = $conn->query("SELECT COUNT(*) as c FROM gym_entries WHERE DATE(scan_time) = CURDATE()")->fetch(PDO::FETCH_ASSOC)['c'];
+$open_tickets = $conn->query("SELECT COUNT(*) as c FROM tickets WHERE status='Open'")->fetch(PDO::FETCH_ASSOC)['c'];
 
 // Handle ticket view (if ?ticket_id is set)
 $viewing_ticket = null;
 $ticket_messages = [];
 if (isset($_GET['ticket_id'])) {
     $tid = intval($_GET['ticket_id']);
-    $viewing_ticket = $conn->query("SELECT t.*, u.first_name, u.last_name, u.email FROM tickets t JOIN users u ON t.user_id = u.id WHERE t.id=$tid")->fetch_assoc();
+    $vt = $conn->prepare("SELECT t.*, u.first_name, u.last_name, u.email FROM tickets t JOIN users u ON t.user_id = u.id WHERE t.id = ? LIMIT 1");
+    $vt->execute([$tid]);
+    $viewing_ticket = $vt->fetch(PDO::FETCH_ASSOC);
     if ($viewing_ticket) {
-        $msg_res = $conn->query("SELECT * FROM ticket_messages WHERE ticket_id=$tid ORDER BY created_at ASC");
-        while ($m = $msg_res->fetch_assoc()) $ticket_messages[] = $m;
+        $msg_stmt = $conn->prepare("SELECT * FROM ticket_messages WHERE ticket_id = ? ORDER BY created_at ASC");
+        $msg_stmt->execute([$tid]);
+        $ticket_messages = $msg_stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 
@@ -53,7 +59,9 @@ if (isset($_GET['ticket_id'])) {
 $editing_user = null;
 if (isset($_GET['edit_user'])) {
     $uid = intval($_GET['edit_user']);
-    $editing_user = $conn->query("SELECT u.*, h.medical_notes, h.health_status FROM users u LEFT JOIN health_conditions h ON u.id = h.user_id WHERE u.id=$uid")->fetch_assoc();
+    $eu = $conn->prepare("SELECT u.*, h.medical_notes, h.health_status FROM users u LEFT JOIN health_conditions h ON u.id = h.user_id WHERE u.id = ? LIMIT 1");
+    $eu->execute([$uid]);
+    $editing_user = $eu->fetch(PDO::FETCH_ASSOC);
 }
 ?>
 <!DOCTYPE html>
@@ -194,9 +202,7 @@ if (isset($_GET['edit_user'])) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
-                        $users_res->data_seek(0);
-                        while($u = $users_res->fetch_assoc()): ?>
+                        <?php foreach ($users as $u): ?>
                         <tr>
                             <td><?php echo $u['id']; ?></td>
                             <td><?php echo htmlspecialchars($u['first_name'] . ' ' . $u['last_name']); ?></td>
@@ -218,7 +224,7 @@ if (isset($_GET['edit_user'])) {
                                 <a href="../../actions/admin/admin_delete_user.php?id=<?php echo $u['id']; ?>" class="btn btn-outline-danger btn-sm py-0 px-2" onclick="return confirm('Delete this user?');"><i class='bx bx-trash'></i></a>
                             </td>
                         </tr>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -233,11 +239,9 @@ if (isset($_GET['edit_user'])) {
                         <label class="text-muted" style="font-size:12px;">Select Member</label>
                         <select name="to_email" class="form-control form-control-dark" required>
                             <option value="">-- Choose a member --</option>
-                            <?php 
-                            $users_res->data_seek(0);
-                            while($u = $users_res->fetch_assoc()): ?>
+                            <?php foreach ($users as $u): ?>
                                 <option value="<?php echo htmlspecialchars($u['email']); ?>"><?php echo htmlspecialchars($u['first_name'] . ' ' . $u['last_name'] . ' (' . $u['email'] . ')'); ?></option>
-                            <?php endwhile; ?>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -273,10 +277,8 @@ if (isset($_GET['edit_user'])) {
                             </form>
                         </div>
                     </div>
-                    <p class="text-muted" style="font-size:13px;">
+                    <p class="" style="font-size:13px;">
                         From: <?php echo htmlspecialchars($viewing_ticket['first_name'] . ' ' . $viewing_ticket['last_name'] . ' (' . $viewing_ticket['email'] . ')'); ?>
-                        | Category: <?php echo $viewing_ticket['category']; ?>
-                        | Priority: <?php echo $viewing_ticket['priority']; ?>
                         | Created: <?php echo $viewing_ticket['created_at']; ?>
                     </p>
 
@@ -310,17 +312,13 @@ if (isset($_GET['edit_user'])) {
                             <th>#</th>
                             <th>User</th>
                             <th>Subject</th>
-                            <th>Category</th>
-                            <th>Priority</th>
                             <th>Status</th>
                             <th>Created</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
-                        $tickets_res->data_seek(0);
-                        while($t = $tickets_res->fetch_assoc()): 
+                        <?php foreach ($tickets as $t): 
                             $badge = 'badge-open';
                             if ($t['status'] === 'Closed') $badge = 'badge-closed';
                             elseif ($t['status'] === 'In Progress') $badge = 'badge-progress';
@@ -329,14 +327,12 @@ if (isset($_GET['edit_user'])) {
                             <td><?php echo $t['id']; ?></td>
                             <td><?php echo htmlspecialchars($t['first_name'] . ' ' . $t['last_name']); ?></td>
                             <td><?php echo htmlspecialchars($t['subject']); ?></td>
-                            <td><?php echo $t['category']; ?></td>
-                            <td><?php echo $t['priority']; ?></td>
                             <td><span class="badge <?php echo $badge; ?>"><?php echo $t['status']; ?></span></td>
                             <td><?php echo $t['created_at']; ?></td>
                             <td><a href="dashboard.php?ticket_id=<?php echo $t['id']; ?>" class="btn btn-outline-info btn-sm py-0 px-2"><i class='bx bx-show'></i> View</a></td>
                         </tr>
-                        <?php endwhile; ?>
-                        <?php if ($tickets_res->num_rows == 0): ?>
+                        <?php endforeach; ?>
+                        <?php if (empty($tickets)): ?>
                         <tr><td colspan="8" class="text-center text-muted">No tickets found.</td></tr>
                         <?php endif; ?>
                     </tbody>
@@ -358,7 +354,7 @@ if (isset($_GET['edit_user'])) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php while($e = $entries_res->fetch_assoc()): ?>
+                        <?php foreach ($entries as $e): ?>
                         <tr>
                             <td><?php echo $e['id']; ?></td>
                             <td><?php echo htmlspecialchars($e['first_name'] . ' ' . $e['last_name']); ?></td>
@@ -370,8 +366,8 @@ if (isset($_GET['edit_user'])) {
                                 </span>
                             </td>
                         </tr>
-                        <?php endwhile; ?>
-                        <?php if ($entries_res->num_rows == 0): ?>
+                        <?php endforeach; ?>
+                        <?php if (empty($entries)): ?>
                         <tr><td colspan="5" class="text-center text-muted">No gym entries recorded yet.</td></tr>
                         <?php endif; ?>
                     </tbody>

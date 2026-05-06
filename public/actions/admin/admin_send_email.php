@@ -10,8 +10,10 @@ $subject = $_POST['subject'];
 $message = $_POST['message'];
 
 // Get user name
-$user_res = $conn->query("SELECT first_name FROM users WHERE email='" . $conn->real_escape_string($toEmail) . "'");
-$toName = $user_res->num_rows > 0 ? $user_res->fetch_assoc()['first_name'] : 'Member';
+ $ustmt = $conn->prepare("SELECT first_name FROM users WHERE email = ? LIMIT 1");
+ $ustmt->execute([$toEmail]);
+ $u = $ustmt->fetch(PDO::FETCH_ASSOC);
+ $toName = $u ? $u['first_name'] : 'Member';
 
 try {
     sendMail($toEmail, $toName, $subject, $message);

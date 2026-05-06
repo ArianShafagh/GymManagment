@@ -12,10 +12,10 @@ RUN apt-get update && apt-get install -y \
 # Install Composer (so you don't have to do it every time)
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Install mysqli and curl extensions
-RUN apt-get update && apt-get install -y libcurl4-openssl-dev && rm -rf /var/lib/apt/lists/*
-RUN docker-php-ext-install mysqli curl
-RUN docker-php-ext-enable mysqli curl
+# Install mysqli, pdo_mysql and curl extensions
+RUN apt-get update && apt-get install -y libcurl4-openssl-dev default-libmysqlclient-dev && rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-install mysqli pdo_mysql curl
+RUN docker-php-ext-enable mysqli pdo_mysql curl
 
 # Copy custom apache configuration if needed, or simply use default
 # Enable mod_rewrite for nice URLs if needed

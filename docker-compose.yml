@@ -16,6 +16,7 @@ services:
       - MailTrap_api_key=8614d9e38bcdc1ed5b19cef6847b6cca
       - Admin_user=admin
       - Admin_pass=BullGym@2026
+      - Admin_email=arian.shafagh2003@gmail.com
     depends_on:
       - db
     networks:

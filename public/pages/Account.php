@@ -6,17 +6,20 @@ if(!isset($_SESSION['user_email'])) {
     exit();
 }
 $email = $_SESSION['user_email'];
-$user_res = $conn->query("SELECT * FROM users WHERE email='$email'");
-$user = $user_res->fetch_assoc();
+$stmt = $conn->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
+$stmt->execute([$email]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
 $user_id = $user['id'];
 
 // Fetch health conditions
-$health_res = $conn->query("SELECT * FROM health_conditions WHERE user_id='$user_id'");
-$health = $health_res->fetch_assoc();
+$hstmt = $conn->prepare("SELECT * FROM health_conditions WHERE user_id = ? LIMIT 1");
+$hstmt->execute([$user_id]);
+$health = $hstmt->fetch(PDO::FETCH_ASSOC);
 
 // Fetch entries
-$entries_res = $conn->query("SELECT COUNT(*) as count FROM gym_entries WHERE user_id='$user_id'");
-$entries = $entries_res->fetch_assoc();
+$est = $conn->prepare("SELECT COUNT(*) as count FROM gym_entries WHERE user_id = ?");
+$est->execute([$user_id]);
+$entries = $est->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,12 +105,15 @@ $entries = $entries_res->fetch_assoc();
                                     <input type="email" class="form-control" value="<?php echo htmlspecialchars($user['email']); ?>" readonly>
                                 </div>
                                 <div class="mb-3">
-                                    <label>Subscription Plan</label>
-                                    <input type="text" class="form-control" value="<?php echo htmlspecialchars($user['subscription_plan']); ?>" readonly>
+                                    <label>Subscription Plan (Read-only)</label>
+                                    <input type="text" class="form-control" value="<?php echo htmlspecialchars($user['subscription_type']); ?>" readonly>
                                     <small class="text-muted">for changes, please contact support.</small>
                                 </div>
-                                <h4 class="mt-4">Health Conditions</h4>
                                 <div class="mb-3">
+                                    <input type="checkbox" name="health_prob" id="health_prob" <?php echo ($health && $health['medical_notes']) ? 'checked' : ''; ?>>
+                                    <label for="health_prob">I have health conditions</label>
+                                </div>
+                                <div class="mb-3" id="medical_notes" style="display: none;">
                                     <label>Medical Notes (Allergies, injuries)</label>
                                     <textarea class="form-control" name="medical_notes"><?php echo isset($health['medical_notes']) ? htmlspecialchars($health['medical_notes']) : ''; ?></textarea>
                                 </div>
@@ -184,11 +190,16 @@ $entries = $entries_res->fetch_assoc();
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $log_res = $conn->query("SELECT * FROM login_history WHERE user_id='$user_id' ORDER BY attempt_time DESC");
-                                        while($log = $log_res->fetch_assoc()) {
-                                            echo "<tr><td>{$log['attempt_time']}</td><td>{$log['ip_address']}</td><td>{$log['device_info']}</td></tr>";
+                                        $log_stmt = $conn->prepare("SELECT * FROM login_history WHERE user_id = ? ORDER BY attempt_time DESC");
+                                        $log_stmt->execute([$user_id]);
+                                        $logs = $log_stmt->fetchAll(PDO::FETCH_ASSOC);
+                                        if (count($logs) > 0) {
+                                            foreach ($logs as $log) {
+                                                echo "<tr><td>{$log['attempt_time']}</td><td>{$log['ip_address']}</td><td>{$log['device_info']}</td></tr>";
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='3'>No login history found.</td></tr>";
                                         }
-                                        if($log_res->num_rows == 0) echo "<tr><td colspan='3'>No login history found.</td></tr>";
                                         ?>
                                     </tbody>
                                 </table>
@@ -213,9 +224,13 @@ $entries = $entries_res->fetch_assoc();
                             <h2 class="anton-regular mb-4">Support & Tickets</h2>
                             <?php if(isset($_GET['view_ticket'])): 
                                 $tid = intval($_GET['view_ticket']);
-                                $viewing_ticket = $conn->query("SELECT * FROM tickets WHERE id=$tid AND user_id=$user_id")->fetch_assoc();
+                                $vt = $conn->prepare("SELECT * FROM tickets WHERE id = ? AND user_id = ? LIMIT 1");
+                                $vt->execute([$tid, $user_id]);
+                                $viewing_ticket = $vt->fetch(PDO::FETCH_ASSOC);
                                 if($viewing_ticket):
-                                    $msg_res = $conn->query("SELECT * FROM ticket_messages WHERE ticket_id=$tid ORDER BY created_at ASC");
+                                    $msg_stmt = $conn->prepare("SELECT * FROM ticket_messages WHERE ticket_id = ? ORDER BY created_at ASC");
+                                    $msg_stmt->execute([$tid]);
+                                    $msg_res = $msg_stmt->fetchAll(PDO::FETCH_ASSOC);
                             ?>
                                 <div class="mb-3">
                                     <a href="Account.php" class="btn btn-outline-secondary btn-sm">← Back to Tickets</a>
@@ -224,13 +239,13 @@ $entries = $entries_res->fetch_assoc();
                                 <p>Status: <span class="badge <?php echo $viewing_ticket['status'] === 'Closed' ? 'bg-success' : 'bg-warning text-dark'; ?>"><?php echo $viewing_ticket['status']; ?></span></p>
 
                                 <div style="max-height: 400px; overflow-y: auto; margin-bottom: 20px;">
-                                    <?php while($m = $msg_res->fetch_assoc()): ?>
+                                    <?php foreach($msg_res as $m): ?>
                                         <div style="margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">
                                             <strong><?php echo $m['sender_type']; ?>:</strong>
                                             <p style="margin: 5px 0;"><?php echo nl2br(htmlspecialchars($m['message'])); ?></p>
                                             <small style="color: gray;"><?php echo $m['created_at']; ?></small>
                                         </div>
-                                    <?php endwhile; ?>
+                                    <?php endforeach; ?>
                                 </div>
 
                                 <?php if($viewing_ticket['status'] !== 'Closed'): ?>
@@ -275,17 +290,22 @@ $entries = $entries_res->fetch_assoc();
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $ticket_res = $conn->query("SELECT * FROM tickets WHERE user_id='$user_id' ORDER BY created_at DESC");
-                                    while($ticket = $ticket_res->fetch_assoc()) {
-                                        echo "<tr>
+                                    $ticket_stmt = $conn->prepare("SELECT * FROM tickets WHERE user_id = ? ORDER BY created_at DESC");
+                                    $ticket_stmt->execute([$user_id]);
+                                    $tickets = $ticket_stmt->fetchAll(PDO::FETCH_ASSOC);
+                                    if (count($tickets) > 0) {
+                                        foreach ($tickets as $ticket) {
+                                            echo "<tr>
                                             <td>#{$ticket['id']}</td>
                                             <td>" . htmlspecialchars($ticket['subject']) . "</td>
                                             <td>{$ticket['status']}</td>
                                             <td>{$ticket['created_at']}</td>
                                             <td><a href='?view_ticket={$ticket['id']}' class='btn btn-sm btn-info text-white'>View</a></td>
                                         </tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='5'>You have no tickets.</td></tr>";
                                     }
-                                    if($ticket_res->num_rows == 0) echo "<tr><td colspan='5'>You have no tickets.</td></tr>";
                                     ?>
                                 </tbody>
                             </table>
@@ -294,11 +314,6 @@ $entries = $entries_res->fetch_assoc();
 
                     </div>
                 </div>
-                
-
-                
-                
-
             </div>
         </section>
 
@@ -306,31 +321,6 @@ $entries = $entries_res->fetch_assoc();
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-    <script>
-        function showSection(sectionId, el) {
-            // Hide all sections
-            const sections = document.querySelectorAll('.dashboard-section');
-            sections.forEach(sec => sec.style.display = 'none');
-
-            // Show requested section
-            const target = document.getElementById('section-' + sectionId);
-            if (target) target.style.display = 'block';
-
-            // Update active state in sidebar
-            const tabs = document.querySelectorAll('#dashboardTabs .list-group-item');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            if (el && el.classList) {
-                el.classList.add('active');
-            }
-        }
-
-        <?php if(isset($_GET['view_ticket'])): ?>
-            showSection('support');
-            // manually set the active tab
-            document.querySelectorAll('#dashboardTabs .list-group-item').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('#dashboardTabs .list-group-item')[3].classList.add('active');
-        <?php endif; ?>
-    </script>
+    <script src="../js/Account.js"></script>
 </body>
 </html>

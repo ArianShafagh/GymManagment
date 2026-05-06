@@ -43,9 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Email check ONLY if email is not empty
     if ($email) {
-        $email_check_query = "SELECT id FROM users WHERE email = '$email' LIMIT 1";
-        $result = mysqli_query($conn, $email_check_query);
-        if ($result && mysqli_num_rows($result) > 0) {
+        $stmt = $conn->prepare("SELECT id FROM users WHERE email = ? LIMIT 1");
+        $stmt->execute([$email]);
+        if ($stmt->rowCount() > 0) {
             $errors[] = "Email is already registered.";
         }
     }
@@ -59,23 +59,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $hashed_password = password_hash($raw_password, PASSWORD_BCRYPT);
 
-        $sql = "INSERT INTO users 
+        $stmt = $conn->prepare("INSERT INTO users 
         (first_name, last_name, date_of_birth, gender, email, password, subscription_type, duration_months, start_date, end_date, payment_method) 
-        VALUES 
-        ('$name', '$lastname', '$dob', '$gender', '$email', '$hashed_password', '$subscription', '$duration', '$start_date', '$end_date', '$payment_method')";
+        VALUES (?,?,?,?,?,?,?,?,?,?,?)");
 
-        if (mysqli_query($conn, $sql)) {
+        try {
+            $conn->beginTransaction();
+            $stmt->execute([$name, $lastname, $dob, $gender, $email, $hashed_password, $subscription, $duration, $start_date, $end_date, $payment_method]);
             // Insert health condition
-            $new_user_id = mysqli_insert_id($conn);
-            $health_status_esc = mysqli_real_escape_string($conn, $health_status);
-            $medical_notes_esc = mysqli_real_escape_string($conn, $medical_notes);
-            mysqli_query($conn, "INSERT INTO health_conditions (user_id, health_status, medical_notes) VALUES ('$new_user_id', '$health_status_esc', '$medical_notes_esc')");
+            $new_user_id = $conn->lastInsertId();
+            $stmt2 = $conn->prepare("INSERT INTO health_conditions (user_id, health_status, medical_notes) VALUES (?,?,?)");
+            $stmt2->execute([$new_user_id, $health_status, $medical_notes]);
+            $conn->commit();
 
             $_SESSION['user_email'] = $email;
             $_SESSION['user_name'] = $name;
             echo "<script>alert('Registration successful! Welcome to Bull Gym!'); window.location.href='Account.php';</script>";
             exit();
-        } else {
+        } catch (Exception $e) {
+            $conn->rollBack();
             echo "<script>alert('Error during registration.');</script>";
         }
     } else {

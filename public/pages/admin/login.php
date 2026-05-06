@@ -2,13 +2,9 @@
 ob_start();
 session_start();
 
-// Restrict admin area to allowed IPs (adjust ADMIN_ALLOWED_IPS env or the default list in config/admin_guard.php)
 include_once __DIR__ . '/../../../config/admin_guard.php';
-check_admin_ip_or_die();
 
-// Static admin credentials
-$ADMIN_USER = 'admin';
-$ADMIN_PASS = 'BullGym@2026';
+$ADMIN_EMAIL = getenv('Admin_email') ?: 'email@example.com';
 
 $error = '';
 
@@ -16,10 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $password = trim($_POST['password'] ?? '');
 
-    if ($username === $ADMIN_USER && $password === $ADMIN_PASS) {
-        $_SESSION['is_admin'] = true;
-        $_SESSION['admin_user'] = $ADMIN_USER;
-        header("Location: dashboard.php");
+    if ($username === getenv('Admin_user') && $password === getenv('Admin_pass')) {
+        begin_admin_email_2fa($ADMIN_EMAIL, $username);
+        header("Location: ../Verify2FA.php");
         exit();
     } else {
         $error = "Invalid credentials.";

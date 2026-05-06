@@ -83,7 +83,7 @@ class TOTP {
     }
 
     /**
-     * Generate the otpauth:// URI for Google Authenticator QR code
+     * Generate the otpauth:// URI for Authenticator QR code
      */
     public static function getQRCodeUrl($label, $secret, $issuer = 'BullGym') {
         $uri = "otpauth://totp/" . urlencode($issuer . ':' . $label) 

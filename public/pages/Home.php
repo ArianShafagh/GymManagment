@@ -254,12 +254,11 @@
         </div>
       </div>
       <div class="learnmorebutton mt-5">
-        <a href="memberships.html" class="btn btn-danger text-white mt-3 px-4">Learn More</a>
+        <a href="#learn-more" class="btn btn-danger text-white mt-3 px-4">Learn More</a>
       </div>
 
     </section>
     <!-- membership plans section end -->
-
 
 
     <!-- news slider section start -->
@@ -301,8 +300,7 @@
               </div>
             </div>
           </div>
-
-
+          
           <!-- item 2 -->
 
 
