@@ -11,9 +11,9 @@ services:
       - DB_USER=root
       - DB_PASS=root
       - DB_PORT=3306
-      - ENCRYPT_SITE_KEY=6LfhVNIsAAAAAFfqThWFXGTFpXjXvlNlkehx_Zmg
-      - ENCRYPT_SECRET_KEY=6LfhVNIsAAAAACw1AVr48XToouQuX4YS9MprWIXR
-      - MailTrap_api_key=8614d9e38bcdc1ed5b19cef6847b6cca
+      - ENCRYPT_SITE_KEY=
+      - ENCRYPT_SECRET_KEY=
+      - MailTrap_api_key=
       - Admin_user=admin
       - Admin_pass=BullGym@2026
       - Admin_email=arian.shafagh2003@gmail.com
