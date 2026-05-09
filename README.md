@@ -546,10 +546,6 @@ We welcome contributions! To contribute:
 - Update documentation for new features
 - Add comments for complex logic
 
-## 📝 License
-
-This project is licensed under the MIT License - see LICENSE file for details.
-
 ## 📞 Support
 
 For issues and questions:
